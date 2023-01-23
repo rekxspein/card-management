@@ -1,4 +1,4 @@
-import { CssBaseline } from '@mui/material';
+import { createTheme, CssBaseline, ThemeProvider } from '@mui/material';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
 import { FC, ReactNode } from 'react';
@@ -19,10 +19,17 @@ const ProviderWrapper: FC<{ children: ReactNode }> = ({ children }) => {
   return (
     <QueryClientProvider client={queryClient}>
       <LocalizationProvider dateAdapter={AdapterMoment}>
-        {children}
+        <ThemeProvider theme={theme}>{children}</ThemeProvider>
       </LocalizationProvider>
     </QueryClientProvider>
   );
 };
+
+const theme = createTheme({
+  palette: {
+    mode: 'dark',
+    primary: { main: '#E30000' }
+  }
+});
 
 export default App;
