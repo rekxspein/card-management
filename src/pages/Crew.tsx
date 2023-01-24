@@ -1,8 +1,7 @@
-import { Box, Button } from '@mui/material';
+import { Box } from '@mui/material';
 import { FC } from 'react';
-import { RouterLink } from '../component/RouterLink';
 
-export const Next: FC = () => {
+export const Crew: FC = () => {
   return (
     <Box
       sx={{
@@ -14,11 +13,7 @@ export const Next: FC = () => {
         justifyContent: 'center'
       }}
     >
-      <h1>Next Page</h1>
-
-      <Button href="/" variant="outlined" LinkComponent={RouterLink}>
-        &lt; Back
-      </Button>
+      Crews Data comes here!!
     </Box>
   );
 };
