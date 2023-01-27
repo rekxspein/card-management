@@ -1,4 +1,4 @@
-import { Box, IconButton } from '@mui/material';
+import { Box, IconButton, LinearProgress, Pagination } from '@mui/material';
 import axios from 'axios';
 import { FC } from 'react';
 import { useQuery } from 'react-query';
@@ -38,6 +38,11 @@ export const Crews: FC = () => {
         disableColumnMenu
         loading={isLoading}
         pagination
+        rowsPerPageOptions={[10, 20, 30]}
+        components={{
+          Pagination: CustomPagination,
+          LoadingOverlay: LinearProgress
+        }}
       />
     </Box>
   );
@@ -73,3 +78,7 @@ const column = new Array<GridColDef | GridActionsColDef>(
     width: 300
   }
 );
+
+const CustomPagination = () => {
+  return <Pagination count={10} color="primary" />;
+};
