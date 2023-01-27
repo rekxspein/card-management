@@ -35,7 +35,7 @@ export const SideDrawer: FC = () => {
           </IconButton>
         </DrawerHeader>
         <Divider />
-        <List onClick={() => ui.setDrawerOpen(false)}>
+        <List>
           <ListItemButton
             href="/"
             selected={location.pathname === '/'}

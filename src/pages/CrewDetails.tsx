@@ -1,4 +1,13 @@
-import { Box, List, ListItem, ListItemText } from '@mui/material';
+import {
+  Box,
+  Button,
+  Divider,
+  LinearProgress,
+  List,
+  ListItem,
+  ListItemText,
+  Pagination
+} from '@mui/material';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { FC } from 'react';
 
@@ -12,14 +21,34 @@ export const CrewDetails: FC = () => {
         flexDirection: 'column'
       }}
     >
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'space-between'
+        }}
+      >
+        <Box></Box>
+        <Button
+          id="create-order-orderlist-btn"
+          sx={{ my: 2 }}
+          variant="contained"
+          href="/crews"
+        >
+          &lt; Back
+        </Button>
+      </Box>
       <DataGrid
         rows={CrewDetail}
         columns={column}
         autoHeight
         disableColumnMenu
         getRowId={row => row.employeeId}
-        hideFooterPagination
-        rowHeight={200}
+        getRowHeight={() => 'auto'}
+        components={{
+          Pagination: CustomPagination,
+          LoadingOverlay: LinearProgress
+        }}
       />
     </Box>
   );
@@ -29,11 +58,16 @@ const CrewDetail = [
   {
     employeeId: '51',
     employeeName: 'Misty Kirlin',
-    cardNumber: ['361011000', '0316556', '032131232'],
-    cardHolderName: ['Jay Kumar', 'Sarkar', 'Arjun'],
-    cardStatus: ['invalid transection', 'do not honor', 'decline'],
-    amount: [250, 250, 322],
-    status: [1, 1, 0]
+    cardNumber: ['361011000', '0316556', '032131232', '1326466564'],
+    cardHolderName: ['Jay Kumar', 'Sarkar', 'Arjun', 'All Pick'],
+    cardStatus: [
+      'invalid transection',
+      'insufficeint fund',
+      'decline',
+      'Pin Declined'
+    ],
+    amount: [250, 250, 322, 800],
+    status: [1, 1, 0, 1]
   }
 ];
 
@@ -41,17 +75,17 @@ const column = new Array<GridColDef>(
   {
     field: 'employeeId',
     headerName: 'Employee ID',
-    width: 120
+    width: 100
   },
   {
     field: 'employeeName',
     headerName: 'Employee Name',
-    width: 300
+    width: 150
   },
   {
     field: 'cardNumber',
     headerName: 'Card Number',
-    width: 300,
+    width: 200,
     renderCell: params => {
       const data = params.value;
       return (
@@ -60,6 +94,7 @@ const column = new Array<GridColDef>(
             return (
               <ListItem key={idx}>
                 <ListItemText primary={e} />
+                <Divider />
               </ListItem>
             );
           })}
@@ -70,7 +105,7 @@ const column = new Array<GridColDef>(
   {
     field: 'cardHolderName',
     headerName: 'Card Holder Name',
-    width: 300,
+    width: 180,
     renderCell: params => {
       const data = params.value;
       return (
@@ -108,7 +143,7 @@ const column = new Array<GridColDef>(
   {
     field: 'amount',
     headerName: 'Amount',
-    width: 300,
+    width: 150,
     renderCell: params => {
       const data = params.value;
       return (
@@ -127,7 +162,7 @@ const column = new Array<GridColDef>(
   {
     field: 'status',
     headerName: 'Status',
-    width: 300,
+    width: 100,
     renderCell: params => {
       const data = params.value;
       return (
@@ -144,3 +179,7 @@ const column = new Array<GridColDef>(
     }
   }
 );
+
+const CustomPagination = () => {
+  return <Pagination count={10} color="primary" />;
+};
