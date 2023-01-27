@@ -53,7 +53,7 @@ export const SideDrawer: FC = () => {
 
           <ListItemButton
             href="/crews/"
-            selected={location.pathname.startsWith('/orders')}
+            selected={location.pathname.startsWith('/crews')}
             component={RouterLink}
           >
             <ListItemIcon>
