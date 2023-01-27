@@ -1,10 +1,11 @@
-import { Box } from '@mui/material';
+import { Box, IconButton } from '@mui/material';
 import axios from 'axios';
 import { FC } from 'react';
 import { useQuery } from 'react-query';
 import { MOCKAPI } from '../constant';
-import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import { DataGrid, GridActionsColDef, GridColDef } from '@mui/x-data-grid';
 import { Loading } from '../component/Loading';
+import { Visibility } from '@mui/icons-material';
 
 export const Crew: FC = () => {
   const getData = async () => {
@@ -30,12 +31,32 @@ export const Crew: FC = () => {
         flexDirection: 'column'
       }}
     >
-      <DataGrid rows={data} columns={column} autoHeight disableColumnMenu />
+      <DataGrid
+        rows={data}
+        columns={column}
+        autoHeight
+        disableColumnMenu
+        loading={isLoading}
+        pagination
+      />
     </Box>
   );
 };
 
-const column: GridColDef[] = [
+const column = new Array<GridColDef | GridActionsColDef>(
+  {
+    field: 'actions',
+    headerName: 'View',
+    type: 'actions',
+    width: 100,
+    getActions: () => {
+      return [
+        <IconButton color="primary">
+          <Visibility />
+        </IconButton>
+      ];
+    }
+  },
   {
     field: 'crewId',
     headerName: 'Crew ID',
@@ -51,4 +72,4 @@ const column: GridColDef[] = [
     headerName: 'Crew Code',
     width: 300
   }
-];
+);
