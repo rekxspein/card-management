@@ -1,6 +1,7 @@
 import { ReactNode } from 'react';
 import Home from './pages/Home';
-import { Crew } from './pages/Crew';
+import { Crews } from './pages/Crews';
+import { CrewDetails } from './pages/CrewDetails';
 
 export const ROUTES: IRoute = {
   path: '/',
@@ -8,7 +9,13 @@ export const ROUTES: IRoute = {
   children: [
     {
       path: '/crews',
-      component: <Crew />
+      component: <Crews />,
+      children: [
+        {
+          path: '/:id/details/',
+          component: <CrewDetails />
+        }
+      ]
     }
   ]
 };

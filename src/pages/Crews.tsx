@@ -7,7 +7,7 @@ import { DataGrid, GridActionsColDef, GridColDef } from '@mui/x-data-grid';
 import { Loading } from '../component/Loading';
 import { Visibility } from '@mui/icons-material';
 
-export const Crew: FC = () => {
+export const Crews: FC = () => {
   const getData = async () => {
     return await axios
       .get(MOCKAPI + 'crewData')
@@ -49,9 +49,9 @@ const column = new Array<GridColDef | GridActionsColDef>(
     headerName: 'View',
     type: 'actions',
     width: 100,
-    getActions: () => {
+    getActions: e => {
       return [
-        <IconButton color="primary">
+        <IconButton href={`/crews/${e.id ?? ''}/details`} color="primary">
           <Visibility />
         </IconButton>
       ];
