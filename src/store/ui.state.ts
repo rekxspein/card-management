@@ -1,8 +1,8 @@
 import create from 'zustand';
 
 export const useUiState = create<IUiState & IUiStateActions>(set => ({
-  drawerWidth: 240,
-  drawerOpen: false,
+  drawerWidth: 230,
+  drawerOpen: true,
   mapLoading: true,
 
   setDrawerWidth: (width: number) => set({ drawerWidth: width }),

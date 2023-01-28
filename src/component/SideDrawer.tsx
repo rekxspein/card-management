@@ -42,13 +42,13 @@ export const SideDrawer: FC = () => {
             component={RouterLink}
           >
             <ListItemIcon>
-              <Tooltip title="Dashboard" placement="right">
+              <Tooltip title="Transaction List" placement="right">
                 <IconButton>
-                  <Icon>dashboard</Icon>
+                  <Icon>people_alt</Icon>
                 </IconButton>
               </Tooltip>
             </ListItemIcon>
-            <ListItemText primary="Dashboard" />
+            <ListItemText primary="Transaction List" />
           </ListItemButton>
 
           <ListItemButton
