@@ -7,7 +7,7 @@ import { DataGrid, GridActionsColDef, GridColDef } from '@mui/x-data-grid';
 import { Loading } from '../component/Loading';
 import { Visibility } from '@mui/icons-material';
 
-export const Crews: FC = () => {
+export const CrewsListPage: FC = () => {
   const getData = async () => {
     return await axios
       .get(MOCKAPI + 'crewData')
@@ -75,6 +75,11 @@ const column = new Array<GridColDef | GridActionsColDef>(
   {
     field: 'crewCode',
     headerName: 'Crew Code',
+    width: 300
+  },
+  {
+    field: 'crewPosition',
+    headerName: 'Crew Position',
     width: 300
   }
 );
