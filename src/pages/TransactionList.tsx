@@ -7,7 +7,7 @@ import { DataGrid, GridActionsColDef, GridColDef } from '@mui/x-data-grid';
 import { Loading } from '../component/Loading';
 import { Visibility } from '@mui/icons-material';
 
-export const TransactionList: FC = () => {
+export const TransactionListPage: FC = () => {
   const getData = async () => {
     return await axios
       .get(MOCKAPI + 'crewData')

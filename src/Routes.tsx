@@ -1,19 +1,19 @@
 import { ReactNode } from 'react';
-import { Crews } from './pages/CrewsList';
-import { CrewDetails } from './pages/CrewDetails';
-import { TransactionList } from './pages/TransactionList';
+import { CrewsListPage } from './pages/CrewsList';
+import { CrewDetailsPage } from './pages/CrewDetails';
+import { TransactionListPage } from './pages/TransactionList';
 
 export const ROUTES: IRoute = {
   path: '/',
-  component: <TransactionList />,
+  component: <TransactionListPage />,
   children: [
     {
       path: '/crews',
-      component: <Crews />,
+      component: <CrewsListPage />,
       children: [
         {
           path: '/:id/details/',
-          component: <CrewDetails />
+          component: <CrewDetailsPage />
         }
       ]
     }

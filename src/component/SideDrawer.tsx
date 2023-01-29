@@ -44,7 +44,7 @@ export const SideDrawer: FC = () => {
             <ListItemIcon>
               <Tooltip title="Transaction List" placement="right">
                 <IconButton>
-                  <Icon>people_alt</Icon>
+                  <Icon>account_balance</Icon>
                 </IconButton>
               </Tooltip>
             </ListItemIcon>
@@ -59,7 +59,7 @@ export const SideDrawer: FC = () => {
             <ListItemIcon>
               <Tooltip title="Crew List" placement="right">
                 <IconButton>
-                  <Icon>date_range</Icon>
+                  <Icon>people_alt</Icon>
                 </IconButton>
               </Tooltip>
             </ListItemIcon>

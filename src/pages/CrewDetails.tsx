@@ -11,7 +11,7 @@ import {
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { FC } from 'react';
 
-export const CrewDetails: FC = () => {
+export const CrewDetailsPage: FC = () => {
   return (
     <Box
       sx={{
