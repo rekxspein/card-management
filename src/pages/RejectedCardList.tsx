@@ -6,7 +6,7 @@ import { MOCKAPI } from '../constant';
 import { DataGrid, GridActionsColDef, GridColDef } from '@mui/x-data-grid';
 import { Loading } from '../component/Loading';
 
-export const TransactionListPage: FC = () => {
+export const RejectedCardListPage: FC = () => {
   const getData = async () => {
     return await axios
       .get(MOCKAPI + 'crewData')
@@ -50,17 +50,17 @@ export const TransactionListPage: FC = () => {
 const column = new Array<GridColDef | GridActionsColDef>(
   {
     field: 'crewId',
-    headerName: 'Crew ID',
+    headerName: 'Card Number',
     width: 120
   },
   {
     field: 'crewName',
-    headerName: 'Crew Name',
+    headerName: 'Card Holder Name',
     width: 300
   },
   {
     field: 'crewCode',
-    headerName: 'Crew Code',
+    headerName: 'Reason',
     width: 300
   }
 );

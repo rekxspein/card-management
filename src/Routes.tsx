@@ -2,6 +2,7 @@ import { ReactNode } from 'react';
 import { CrewsListPage } from './pages/CrewsList';
 import { CrewDetailsPage } from './pages/CrewDetails';
 import { TransactionListPage } from './pages/TransactionList';
+import { RejectedCardListPage } from './pages/RejectedCardList';
 
 export const ROUTES: IRoute = {
   path: '/',
@@ -16,6 +17,10 @@ export const ROUTES: IRoute = {
           component: <CrewDetailsPage />
         }
       ]
+    },
+    {
+      path: '/rejected-card-list/',
+      component: <RejectedCardListPage />
     }
   ]
 };

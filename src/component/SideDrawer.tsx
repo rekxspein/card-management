@@ -65,6 +65,21 @@ export const SideDrawer: FC = () => {
             </ListItemIcon>
             <ListItemText primary="Crew List" />
           </ListItemButton>
+
+          <ListItemButton
+            href="/rejected-card-list/"
+            selected={location.pathname.startsWith('/rejected-card-list')}
+            component={RouterLink}
+          >
+            <ListItemIcon>
+              <Tooltip title="Rejected Card List" placement="right">
+                <IconButton>
+                  <Icon>unpublished</Icon>
+                </IconButton>
+              </Tooltip>
+            </ListItemIcon>
+            <ListItemText primary="Rejected Card List" />
+          </ListItemButton>
         </List>
       </Drawer>
     </>
