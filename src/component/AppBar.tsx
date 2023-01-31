@@ -10,10 +10,11 @@ import {
 import MenuIcon from '@mui/icons-material/Menu';
 import { FC } from 'react';
 import { useUiState } from '../store/ui.state';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 export const TopBar: FC = () => {
   const ui = useUiState();
+  const route = useLocation();
 
   return (
     <AppBar position="sticky" open={ui.drawerOpen} drawerWidth={ui.drawerWidth}>
@@ -39,9 +40,21 @@ export const TopBar: FC = () => {
               textDecoration: 'none'
             }}
           >
-            <Typography variant="h6" noWrap component="div">
-              Card Management
-            </Typography>
+            {route.pathname === '/' && (
+              <Typography variant="h6" noWrap component="div">
+                Transaction List
+              </Typography>
+            )}
+            {route.pathname === '/crews/' && (
+              <Typography variant="h6" noWrap component="div">
+                Crew List
+              </Typography>
+            )}
+            {route.pathname === '/rejected-card-list/' && (
+              <Typography variant="h6" noWrap component="div">
+                Rejected Card List
+              </Typography>
+            )}
           </Link>
         </Box>
 
