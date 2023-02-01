@@ -61,7 +61,7 @@ const CrewDetail = [
     cardNumber: ['361011000', '0316556', '032131232', '1326466564'],
     cardHolderName: ['Jay Kumar', 'Sarkar', 'Arjun', 'All Pick'],
     cardStatus: [
-      'invalid transection',
+      'invalid transaction',
       'insufficeint fund',
       'decline',
       'Pin Declined'

@@ -27,8 +27,8 @@ const ProviderWrapper: FC<{ children: ReactNode }> = ({ children }) => {
 
 const theme = createTheme({
   palette: {
-    mode: 'light',
-    primary: { main: '#4267B2' }
+    mode: 'dark',
+    primary: { main: '#C70039' }
   }
 });
 

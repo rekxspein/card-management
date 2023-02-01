@@ -34,7 +34,7 @@ export const TopBar: FC = () => {
         </IconButton>
         <Box>
           <Link
-            to="/"
+            to={route.pathname}
             style={{
               color: 'white',
               textDecoration: 'none'
