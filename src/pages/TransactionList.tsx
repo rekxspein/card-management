@@ -1,4 +1,4 @@
-import { Box, LinearProgress, Pagination, Typography } from '@mui/material';
+import { Box, LinearProgress, Pagination } from '@mui/material';
 import axios from 'axios';
 import { FC, useEffect } from 'react';
 import { useQuery } from 'react-query';
@@ -9,7 +9,7 @@ import { usePageNumber } from '../store/customPage';
 
 const getData = async (pageNumber: number, pageSize: number) => {
   return await axios
-    .get(BASE_API_URL + `airasiadata?page=${pageNumber}&size=${pageSize}`)
+    .get(BASE_API_URL + `airasia_all_data?page=${pageNumber}&size=${pageSize}`)
     .then(r => {
       return r.data;
     })
@@ -168,7 +168,6 @@ const CustomPagination = () => {
   const setPageNumber = usePageNumber(e => e.setPageNumber);
   return (
     <>
-      <Typography>{pageNumber}</Typography>
       <Pagination
         count={10}
         color="primary"
