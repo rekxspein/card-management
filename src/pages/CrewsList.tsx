@@ -2,22 +2,34 @@ import { Box, IconButton, LinearProgress, Pagination } from '@mui/material';
 import axios from 'axios';
 import { FC } from 'react';
 import { useQuery } from 'react-query';
-import { MOCKAPI } from '../constant';
+import { BASE_API_URL } from '../constant';
 import { DataGrid, GridActionsColDef, GridColDef } from '@mui/x-data-grid';
 import { Loading } from '../component/Loading';
 import { Visibility } from '@mui/icons-material';
+import { usePageNumber } from '../store/customPage';
+
+const getData = async (pageNumber: number, pageSize: number) => {
+  return await axios
+    .get(
+      BASE_API_URL +
+        `airasia_all_data/uniquecrewdata?page=${pageNumber}&size=${pageSize}`
+    )
+    .then(r => {
+      return r.data;
+    })
+    .catch(error => error);
+};
 
 export const CrewsListPage: FC = () => {
-  const getData = async () => {
-    return await axios
-      .get(MOCKAPI + 'crewData')
-      .then(r => {
-        return r.data;
-      })
-      .catch(error => error);
-  };
-
-  const { data, isLoading } = useQuery('MockData', getData);
+  const pageNumber = usePageNumber(e => e.pageNumber);
+  const pageSize = usePageNumber(e => e.pageSize);
+  const { data, isLoading } = useQuery(
+    ['getData', pageNumber, pageSize],
+    () => getData(pageNumber, pageSize),
+    {
+      keepPreviousData: true
+    }
+  );
 
   if (isLoading) {
     return <Loading />;
@@ -32,7 +44,8 @@ export const CrewsListPage: FC = () => {
       }}
     >
       <DataGrid
-        rows={data}
+        rows={data.items}
+        getRowId={rows => rows.employeeId}
         columns={column}
         autoHeight
         disableColumnMenu
@@ -63,23 +76,23 @@ const column = new Array<GridColDef | GridActionsColDef>(
     }
   },
   {
-    field: 'crewId',
-    headerName: 'Crew ID',
+    field: 'employeeId',
+    headerName: 'Employee ID',
     width: 120
   },
   {
-    field: 'crewName',
-    headerName: 'Crew Name',
+    field: 'employeeName',
+    headerName: 'Employee Name',
     width: 300
   },
   {
-    field: 'crewCode',
-    headerName: 'Crew Code',
+    field: 'employeeCode',
+    headerName: 'Employee Code',
     width: 300
   },
   {
-    field: 'crewPosition',
-    headerName: 'Crew Position',
+    field: 'position',
+    headerName: 'Position',
     width: 300
   }
 );
