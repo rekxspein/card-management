@@ -2,22 +2,29 @@ import { Box, LinearProgress, Pagination } from '@mui/material';
 import axios from 'axios';
 import { FC } from 'react';
 import { useQuery } from 'react-query';
-import { MOCKAPI } from '../constant';
+import { BASE_API_URL } from '../constant';
 import { DataGrid, GridActionsColDef, GridColDef } from '@mui/x-data-grid';
 import { Loading } from '../component/Loading';
+import { usePageNumber } from '../store/customPage';
+
+const getData = async (pageNumber: number, pageSize: number) => {
+  return await axios
+    .get(
+      BASE_API_URL +
+        `airasia_all_data/rejectedcardlist?page=${pageNumber}&size=${pageSize}`
+    )
+    .then(r => {
+      return r.data;
+    })
+    .catch(error => error);
+};
 
 export const RejectedCardListPage: FC = () => {
-  const getData = async () => {
-    return await axios
-      .get(MOCKAPI + 'crewData')
-      .then(r => {
-        return r.data;
-      })
-      .catch(error => error);
-  };
-
-  const { data, isLoading } = useQuery('MockData', getData);
-
+  const pageNumber = usePageNumber(e => e.pageNumber);
+  const pageSize = usePageNumber(e => e.pageSize);
+  const { data, isLoading } = useQuery(['getData', pageNumber, pageSize], () =>
+    getData(pageNumber, pageSize)
+  );
   if (isLoading) {
     return <Loading />;
   }
@@ -31,17 +38,17 @@ export const RejectedCardListPage: FC = () => {
       }}
     >
       <DataGrid
-        rows={data}
+        rows={data.items}
+        getRowId={rows => rows._id}
         columns={column}
         autoHeight
         disableColumnMenu
-        loading={isLoading}
         pagination
-        rowsPerPageOptions={[10, 20, 30]}
         components={{
           Pagination: CustomPagination,
           LoadingOverlay: LinearProgress
         }}
+        disableSelectionOnClick
       />
     </Box>
   );
@@ -49,19 +56,34 @@ export const RejectedCardListPage: FC = () => {
 
 const column = new Array<GridColDef | GridActionsColDef>(
   {
-    field: 'crewId',
-    headerName: 'Card Number',
-    width: 120
-  },
-  {
-    field: 'crewName',
+    field: 'CardHolderName',
     headerName: 'Card Holder Name',
-    width: 300
+    width: 200
   },
   {
-    field: 'crewCode',
+    field: 'First_6_digit_of_Card',
+    headerName: 'First 6 Digits of Card',
+    width: 200
+  },
+  {
+    field: 'Card_Last_Digits',
+    headerName: 'Card Last Digits',
+    width: 200
+  },
+  {
+    field: 'TerminalDisplay',
     headerName: 'Reason',
-    width: 300
+    width: 200
+  },
+  {
+    field: 'ResponseCode',
+    headerName: 'Response Code',
+    width: 200
+  },
+  {
+    field: 'Counts',
+    headerName: 'No. of Attempts',
+    width: 200
   }
 );
 

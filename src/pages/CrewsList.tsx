@@ -23,18 +23,13 @@ const getData = async (pageNumber: number, pageSize: number) => {
 export const CrewsListPage: FC = () => {
   const pageNumber = usePageNumber(e => e.pageNumber);
   const pageSize = usePageNumber(e => e.pageSize);
-  const { data, isLoading } = useQuery(
-    ['getData', pageNumber, pageSize],
-    () => getData(pageNumber, pageSize),
-    {
-      keepPreviousData: true
-    }
+  const { data, isLoading } = useQuery(['getData', pageNumber, pageSize], () =>
+    getData(pageNumber, pageSize)
   );
 
   if (isLoading) {
     return <Loading />;
   }
-
   return (
     <Box
       sx={{
@@ -46,17 +41,17 @@ export const CrewsListPage: FC = () => {
     >
       <DataGrid
         rows={data.items}
-        getRowId={rows => rows.employeeId}
+        getRowId={rows => rows._id}
         columns={column}
         autoHeight
         disableColumnMenu
         loading={isLoading}
         pagination
-        rowsPerPageOptions={[10, 20, 30]}
         components={{
           Pagination: CustomPagination,
           LoadingOverlay: LinearProgress
         }}
+        disableSelectionOnClick
       />
     </Box>
   );
@@ -70,7 +65,10 @@ const column = new Array<GridColDef | GridActionsColDef>(
     width: 100,
     getActions: e => {
       return [
-        <IconButton href={`/crews/${e.id ?? ''}/details`} color="primary">
+        <IconButton
+          href={`/crews/${e.row.employeeId ?? ''}/details`}
+          color="primary"
+        >
           <Visibility />
         </IconButton>
       ];
@@ -99,5 +97,6 @@ const column = new Array<GridColDef | GridActionsColDef>(
 );
 
 const CustomPagination = () => {
-  return <Pagination count={10} color="primary" />;
+  const pageNumber = usePageNumber(e => e.pageNumber);
+  return <Pagination count={10} color="primary" page={pageNumber} />;
 };
