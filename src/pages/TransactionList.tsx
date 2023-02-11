@@ -59,27 +59,27 @@ const column = new Array<GridColDef | GridActionsColDef>(
   {
     field: 'MerchantName',
     headerName: 'Merchant Name',
-    width: 300
+    width: 200
   },
   {
     field: 'MerchantCity',
     headerName: 'Merchant City',
-    width: 300
+    width: 150
   },
   {
     field: 'TxDateTime',
     headerName: 'Tx Date Time',
-    width: 300
+    width: 200
   },
   {
     field: 'Amount',
     headerName: 'Amount',
-    width: 300
+    width: 100
   },
   {
     field: 'CardNumber',
     headerName: 'Card Number',
-    width: 300
+    width: 200
   },
   {
     field: 'TxStatus',
@@ -87,74 +87,39 @@ const column = new Array<GridColDef | GridActionsColDef>(
     width: 300
   },
   {
-    field: 'msCardHolderName',
+    field: 'CardHolderName',
     headerName: 'MS Card Holder Name',
-    width: 300
+    width: 250
   },
   {
     field: 'TxType',
     headerName: 'Tx Type',
-    width: 300
+    width: 100
   },
   {
     field: 'BookingInfo_customerName',
     headerName: 'Booking Info Customer Name',
-    width: 300
+    width: 250
   },
   {
     field: 'BookingInfo_pnr',
     headerName: 'Booking Info PNR',
-    width: 300
+    width: 150
   },
   {
-    field: 'Crew_employeeCode',
-    headerName: 'Crew Employee Code',
-    width: 300
+    field: 'BookingInfo_mobile',
+    headerName: 'Booking Info Mobile',
+    width: 200
   },
   {
-    field: 'Crew_employeeName',
-    headerName: 'Crew Employee Name',
-    width: 300
+    field: 'Origin',
+    headerName: 'Origin',
+    width: 100
   },
   {
-    field: 'OrderNo',
-    headerName: 'Order Number',
-    width: 300
-  },
-  {
-    field: 'CabinCrew',
-    headerName: 'Cabin Crew',
-    width: 300
-  },
-  {
-    field: 'Crew',
-    headerName: 'Crew',
-    width: 300
-  },
-  {
-    field: 'CrewFromArms',
-    headerName: 'Crew From Arms',
-    width: 300
-  },
-  {
-    field: 'employeeId',
-    headerName: 'Employee ID',
-    width: 300
-  },
-  {
-    field: 'employeeName',
-    headerName: 'Employee Name',
-    width: 300
-  },
-  {
-    field: 'employeeCode',
-    headerName: 'Employee Code',
-    width: 300
-  },
-  {
-    field: 'position',
-    headerName: 'Position',
-    width: 300
+    field: 'Destination',
+    headerName: 'Destination',
+    width: 100
   }
 );
 
