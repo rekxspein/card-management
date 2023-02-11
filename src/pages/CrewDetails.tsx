@@ -1,17 +1,39 @@
 import {
   Box,
   Button,
-  Divider,
-  LinearProgress,
-  List,
-  ListItem,
-  ListItemText,
-  Pagination
+  Paper,
+  Table,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow
 } from '@mui/material';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import axios from 'axios';
 import { FC } from 'react';
+import { useQuery } from 'react-query';
+import { useParams } from 'react-router-dom';
+import { Loading } from '../component/Loading';
+import { BASE_API_URL } from '../constant';
+
+const getData = async (id: string | undefined) => {
+  return await axios
+    .get(BASE_API_URL + `airasia_all_data/findempid/${id}`)
+    .then(r => {
+      return r.data;
+    })
+    .catch(error => error);
+};
 
 export const CrewDetailsPage: FC = () => {
+  const { id } = useParams();
+  const { data, isLoading } = useQuery(['getData', id], () => getData(id), {
+    keepPreviousData: true
+  });
+
+  if (isLoading) {
+    return <Loading />;
+  }
   return (
     <Box
       sx={{
@@ -38,148 +60,52 @@ export const CrewDetailsPage: FC = () => {
           &lt; Back
         </Button>
       </Box>
+      <Box>
+        <TableContainer component={Paper}>
+          <Table sx={{ minWidth: 650 }} aria-label="simple table">
+            <TableHead>
+              <TableRow>
+                <TableCell>Employee Name : {data[0].EmployeeName}</TableCell>
+                <TableCell align="right">
+                  Employee ID : {data[0].EmployeeId}
+                </TableCell>
+              </TableRow>
+            </TableHead>
+          </Table>
+        </TableContainer>
+      </Box>
       <DataGrid
-        rows={CrewDetail}
+        rows={data}
         columns={column}
         autoHeight
         disableColumnMenu
-        getRowId={row => row.employeeId}
+        pagination
+        getRowId={row => row.id}
         getRowHeight={() => 'auto'}
-        components={{
-          Pagination: CustomPagination,
-          LoadingOverlay: LinearProgress
-        }}
       />
     </Box>
   );
 };
 
-const CrewDetail = [
-  {
-    employeeId: '51',
-    employeeName: 'Misty Kirlin',
-    cardNumber: ['361011000', '0316556', '032131232', '1326466564'],
-    cardHolderName: ['Jay Kumar', 'Sarkar', 'Arjun', 'All Pick'],
-    cardStatus: [
-      'invalid transaction',
-      'insufficeint fund',
-      'decline',
-      'Pin Declined'
-    ],
-    amount: [250, 250, 322, 800],
-    status: [1, 1, 0, 1]
-  }
-];
-
 const column = new Array<GridColDef>(
   {
-    field: 'employeeId',
-    headerName: 'Employee ID',
-    width: 100
-  },
-  {
-    field: 'employeeName',
-    headerName: 'Employee Name',
-    width: 150
-  },
-  {
-    field: 'cardNumber',
+    field: 'CardNumber',
     headerName: 'Card Number',
-    width: 200,
-    renderCell: params => {
-      const data = params.value;
-      return (
-        <List>
-          {data.map((e: any, idx: number) => {
-            return (
-              <ListItem key={idx}>
-                <ListItemText primary={e} />
-                <Divider />
-              </ListItem>
-            );
-          })}
-        </List>
-      );
-    }
+    width: 200
   },
   {
-    field: 'cardHolderName',
+    field: 'CardHolderName',
     headerName: 'Card Holder Name',
-    width: 180,
-    renderCell: params => {
-      const data = params.value;
-      return (
-        <List>
-          {data.map((e: any, idx: number) => {
-            return (
-              <ListItem key={idx}>
-                <ListItemText primary={e} />
-              </ListItem>
-            );
-          })}
-        </List>
-      );
-    }
+    width: 200
   },
   {
-    field: 'cardStatus',
-    headerName: 'Card Status',
-    width: 300,
-    renderCell: params => {
-      const data = params.value;
-      return (
-        <List>
-          {data.map((e: any, idx: number) => {
-            return (
-              <ListItem key={idx}>
-                <ListItemText primary={e} />
-              </ListItem>
-            );
-          })}
-        </List>
-      );
-    }
-  },
-  {
-    field: 'amount',
+    field: 'Amount',
     headerName: 'Amount',
-    width: 150,
-    renderCell: params => {
-      const data = params.value;
-      return (
-        <List>
-          {data.map((e: any, idx: number) => {
-            return (
-              <ListItem key={idx}>
-                <ListItemText primary={e} />
-              </ListItem>
-            );
-          })}
-        </List>
-      );
-    }
+    width: 200
   },
   {
-    field: 'status',
-    headerName: 'Status',
-    width: 100,
-    renderCell: params => {
-      const data = params.value;
-      return (
-        <List>
-          {data.map((e: any, idx: number) => {
-            return (
-              <ListItem key={idx}>
-                <ListItemText primary={e} />
-              </ListItem>
-            );
-          })}
-        </List>
-      );
-    }
+    field: 'Status',
+    headerName: 'Rejection Reason',
+    width: 200
   }
 );
-
-const CustomPagination = () => {
-  return <Pagination count={10} color="primary" />;
-};
