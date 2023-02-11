@@ -34,6 +34,7 @@ export const CrewsListPage: FC = () => {
   if (isLoading) {
     return <Loading />;
   }
+
   return (
     <Box
       sx={{
