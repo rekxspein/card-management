@@ -19,12 +19,8 @@ const getData = async (pageNumber: number, pageSize: number) => {
 export const TransactionListPage: FC = () => {
   const pageNumber = usePageNumber(e => e.pageNumber);
   const pageSize = usePageNumber(e => e.pageSize);
-  const { data, isLoading } = useQuery(
-    ['getData', pageNumber, pageSize],
-    () => getData(pageNumber, pageSize),
-    {
-      keepPreviousData: true
-    }
+  const { data, isLoading } = useQuery(['getData', pageNumber, pageSize], () =>
+    getData(pageNumber, pageSize)
   );
   useEffect(() => {
     getData(pageNumber, pageSize);
@@ -44,17 +40,16 @@ export const TransactionListPage: FC = () => {
     >
       <DataGrid
         rows={data.items}
-        getRowId={rows => rows.employeeId}
+        getRowId={rows => rows._id}
         columns={column}
         autoHeight
         disableColumnMenu
-        loading={isLoading}
         pagination
-        rowsPerPageOptions={[10, 20, 30]}
         components={{
           Pagination: CustomPagination,
           LoadingOverlay: LinearProgress
         }}
+        disableSelectionOnClick
       />
     </Box>
   );
