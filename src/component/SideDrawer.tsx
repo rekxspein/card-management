@@ -140,13 +140,13 @@ export const SideDrawer: FC = () => {
             component={RouterLink}
           >
             <ListItemIcon>
-              <Tooltip title="Crew List" placement="right">
+              <Tooltip title="Crew Transactions" placement="right">
                 <IconButton>
                   <Icon>people_alt</Icon>
                 </IconButton>
               </Tooltip>
             </ListItemIcon>
-            <ListItemText primary="Crew List" />
+            <ListItemText primary="Crew Transactions" />
           </ListItemButton>
 
           <ListItemButton
@@ -161,7 +161,22 @@ export const SideDrawer: FC = () => {
                 </IconButton>
               </Tooltip>
             </ListItemIcon>
-            <ListItemText primary="Rejected Card List" />
+            <ListItemText primary="Declined Card List" />
+          </ListItemButton>
+
+          <ListItemButton
+            href="/grey-card-list/"
+            selected={location.pathname.startsWith('/grey-card-list')}
+            component={RouterLink}
+          >
+            <ListItemIcon>
+              <Tooltip title="Grey List" placement="right">
+                <IconButton>
+                  <Icon>block</Icon>
+                </IconButton>
+              </Tooltip>
+            </ListItemIcon>
+            <ListItemText primary="Grey List" />
           </ListItemButton>
         </List>
       </Drawer>
