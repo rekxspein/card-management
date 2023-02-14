@@ -3,6 +3,7 @@ import { CrewsListPage } from './pages/CrewsList';
 import { CrewDetailsPage } from './pages/CrewDetails';
 import { TransactionListPage } from './pages/TransactionList';
 import { RejectedCardListPage } from './pages/RejectedCardList';
+import { GreyListPage } from './pages/GreyList';
 
 export const ROUTES: IRoute = {
   path: '/',
@@ -21,6 +22,10 @@ export const ROUTES: IRoute = {
     {
       path: '/rejected-card-list/',
       component: <RejectedCardListPage />
+    },
+    {
+      path: '/grey-card-list/',
+      component: <GreyListPage />
     }
   ]
 };
