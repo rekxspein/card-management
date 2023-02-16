@@ -4,7 +4,7 @@ export const usePageNumber = create<
   ICustomPagination & ICustomPaginationActions
 >(set => ({
   pageNumber: 1,
-  pageSize: 100,
+  pageSize: 15,
   total: 0,
 
   setPageNumber: (pageNo: number) => set({ pageNumber: pageNo }),

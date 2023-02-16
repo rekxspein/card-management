@@ -3,7 +3,12 @@ import axios from 'axios';
 import { FC } from 'react';
 import { useQuery } from 'react-query';
 import { BASE_API_URL } from '../constant';
-import { DataGrid, GridActionsColDef, GridColDef } from '@mui/x-data-grid';
+import {
+  DataGrid,
+  GridActionsColDef,
+  GridColDef,
+  GridToolbar
+} from '@mui/x-data-grid';
 import { Loading } from '../component/Loading';
 import { usePageNumber } from '../store/customPage';
 
@@ -46,7 +51,8 @@ export const RejectedCardListPage: FC = () => {
         pagination
         components={{
           Pagination: CustomPagination,
-          LoadingOverlay: LinearProgress
+          LoadingOverlay: LinearProgress,
+          Toolbar: GridToolbar
         }}
         disableSelectionOnClick
       />
