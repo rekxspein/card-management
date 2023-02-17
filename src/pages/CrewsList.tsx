@@ -64,14 +64,18 @@ const column = new Array<GridColDef | GridActionsColDef>(
     type: 'actions',
     width: 100,
     getActions: e => {
-      return [
-        <IconButton
-          href={`/crews/${e.row.employeeId ?? ''}/details`}
-          color="primary"
-        >
-          <Visibility />
-        </IconButton>
-      ];
+      if (e.row.employeeCode) {
+        return [
+          <IconButton
+            href={`/crews/${e.row.employeeId ?? ''}/details/`}
+            color="primary"
+          >
+            <Visibility />
+          </IconButton>
+        ];
+      } else {
+        return [];
+      }
     }
   },
   {
