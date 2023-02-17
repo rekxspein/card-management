@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  LinearProgress,
   Paper,
   Table,
   TableCell,
@@ -8,7 +9,7 @@ import {
   TableHead,
   TableRow
 } from '@mui/material';
-import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import { DataGrid, GridColDef, GridToolbar } from '@mui/x-data-grid';
 import axios from 'axios';
 import { FC } from 'react';
 import { useQuery } from 'react-query';
@@ -53,7 +54,7 @@ export const CrewDetailsPage: FC = () => {
         <Box></Box>
         <Button
           id="create-order-orderlist-btn"
-          sx={{ my: 2 }}
+          sx={{ m: 1 }}
           variant="contained"
           href="/crews"
         >
@@ -65,9 +66,11 @@ export const CrewDetailsPage: FC = () => {
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>
               <TableRow>
-                <TableCell>Employee Name : {data[0].EmployeeName}</TableCell>
+                <TableCell>
+                  Crew Name : {data[0].EmployeeName ?? 'Loading'}
+                </TableCell>
                 <TableCell align="right">
-                  Employee ID : {data[0].EmployeeId}
+                  Employee ID : {data[0].EmployeeId ?? 'Loading'}
                 </TableCell>
               </TableRow>
             </TableHead>
@@ -82,12 +85,21 @@ export const CrewDetailsPage: FC = () => {
         pagination
         getRowId={row => row.id}
         getRowHeight={() => 'auto'}
+        components={{
+          LoadingOverlay: LinearProgress,
+          Toolbar: GridToolbar
+        }}
       />
     </Box>
   );
 };
 
 const column = new Array<GridColDef>(
+  {
+    field: 'EmployeeName',
+    headerName: 'Crew Name',
+    width: 200
+  },
   {
     field: 'CardNumber',
     headerName: 'Card Number',
