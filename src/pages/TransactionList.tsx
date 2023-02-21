@@ -50,6 +50,7 @@ export const TransactionListPage: FC = () => {
         autoHeight
         disableColumnMenu
         pagination
+        loading={isLoading}
         components={{
           Pagination: CustomPagination,
           LoadingOverlay: LinearProgress,
@@ -90,7 +91,7 @@ const column = new Array<GridColDef | GridActionsColDef>(
   {
     field: 'TxStatus',
     headerName: 'Tx Status',
-    width: 300
+    width: 200
   },
   {
     field: 'CardHolderName',
