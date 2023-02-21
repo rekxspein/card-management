@@ -49,6 +49,7 @@ export const RejectedCardListPage: FC = () => {
         autoHeight
         disableColumnMenu
         pagination
+        loading={isLoading}
         components={{
           Pagination: CustomPagination,
           LoadingOverlay: LinearProgress,
@@ -94,5 +95,14 @@ const column = new Array<GridColDef | GridActionsColDef>(
 );
 
 const CustomPagination = () => {
-  return <Pagination count={10} color="primary" />;
+  const pageNumber = usePageNumber(e => e.pageNumber);
+  const setPageNumber = usePageNumber(e => e.setPageNumber);
+  return (
+    <Pagination
+      count={10}
+      color="primary"
+      page={pageNumber}
+      onChange={(_event, value) => setPageNumber(value)}
+    />
+  );
 };

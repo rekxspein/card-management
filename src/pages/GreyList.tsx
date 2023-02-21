@@ -76,7 +76,7 @@ const column = new Array<GridColDef | GridActionsColDef>(
           </IconButton>
         ];
       } else {
-        return [];
+        return []; // This will prevent rendering of this Cell before data is fetched
       }
     }
   },
@@ -114,5 +114,13 @@ const column = new Array<GridColDef | GridActionsColDef>(
 
 const CustomPagination = () => {
   const pageNumber = usePageNumber(e => e.pageNumber);
-  return <Pagination count={10} color="primary" page={pageNumber} />;
+  const setPageNumber = usePageNumber(e => e.setPageNumber);
+  return (
+    <Pagination
+      count={10}
+      color="primary"
+      page={pageNumber}
+      onChange={(_event, value) => setPageNumber(value)}
+    />
+  );
 };

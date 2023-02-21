@@ -67,10 +67,10 @@ export const CrewDetailsPage: FC = () => {
             <TableHead>
               <TableRow>
                 <TableCell>
-                  Crew Name : {data[0].EmployeeName ?? 'Loading'}
+                  Crew Name : {data[0]?.EmployeeName ?? 'N/A'}
                 </TableCell>
                 <TableCell align="right">
-                  Employee ID : {data[0].EmployeeId ?? 'Loading'}
+                  Employee ID : {data[0]?.EmployeeId ?? 'N/A'}
                 </TableCell>
               </TableRow>
             </TableHead>
@@ -83,6 +83,7 @@ export const CrewDetailsPage: FC = () => {
         autoHeight
         disableColumnMenu
         pagination
+        loading={isLoading}
         getRowId={row => row.id}
         getRowHeight={() => 'auto'}
         components={{
@@ -118,6 +119,6 @@ const column = new Array<GridColDef>(
   {
     field: 'Status',
     headerName: 'Rejection Reason',
-    width: 200
+    width: 400
   }
 );
