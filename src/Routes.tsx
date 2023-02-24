@@ -2,7 +2,7 @@ import { ReactNode } from 'react';
 import { CrewsListPage } from './pages/CrewsList';
 import { CrewDetailsPage } from './pages/CrewDetails';
 import { TransactionListPage } from './pages/TransactionList';
-import { RejectedCardListPage } from './pages/RejectedCardList';
+import { DeclinedCardListPage } from './pages/DeclinedCardList';
 import { GreyListPage } from './pages/GreyList';
 
 export const ROUTES: IRoute = {
@@ -21,7 +21,7 @@ export const ROUTES: IRoute = {
     },
     {
       path: '/rejected-card-list/',
-      component: <RejectedCardListPage />
+      component: <DeclinedCardListPage />
     },
     {
       path: '/grey-card-list/',
