@@ -14,7 +14,10 @@ import { usePageNumber } from '../store/customPage';
 
 const getData = async (pageNumber: number, pageSize: number) => {
   return await axios
-    .get(BASE_API_URL + `airasia_all_data?page=${pageNumber}&size=${pageSize}`)
+    .get(
+      BASE_API_URL +
+        `transaction_list/airlines=1?page=${pageNumber}&size=${pageSize}`
+    )
     .then(r => {
       return r.data;
     })

@@ -19,7 +19,7 @@ import { BASE_API_URL } from '../constant';
 
 const getData = async (id: string | undefined) => {
   return await axios
-    .get(BASE_API_URL + `airasia_all_data/findempid/${id}`)
+    .get(BASE_API_URL + `find_by_empid/airlines=1/emp_id=${id}`)
     .then(r => {
       return r.data;
     })

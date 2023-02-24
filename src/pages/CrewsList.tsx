@@ -12,7 +12,7 @@ const getData = async (pageNumber: number, pageSize: number) => {
   return await axios
     .get(
       BASE_API_URL +
-        `airasia_all_data/uniquecrewdata?page=${pageNumber}&size=${pageSize}`
+        `uniquecrew_list/airlines=1?page=${pageNumber}&size=${pageSize}`
     )
     .then(r => {
       return r.data;
