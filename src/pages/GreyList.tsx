@@ -17,7 +17,7 @@ const getData = async (pageNumber: number, pageSize: number) => {
   return await axios
     .get(
       BASE_API_URL +
-        `airasia_all_data/black_cards?page=${pageNumber}&size=${pageSize}`
+        `black_cards/airlines=1?page=${pageNumber}&size=${pageSize}`
     )
     .then(r => {
       return r.data;
