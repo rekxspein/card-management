@@ -38,7 +38,7 @@ const MenuProps = {
     }
   }
 };
-const names = ['Air Asia', 'Go Airlines'];
+const availableAirlines = ['Air Asia', 'Go Airlines'];
 
 function getStyles(name: string, personName: readonly string[], theme: Theme) {
   return {
@@ -104,7 +104,7 @@ export const SideDrawer: FC = () => {
             )}
             MenuProps={MenuProps}
           >
-            {names.map(name => (
+            {availableAirlines.map(name => (
               <MenuItem
                 key={name}
                 value={name}
