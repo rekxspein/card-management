@@ -55,6 +55,11 @@ export const TopBar: FC = () => {
                 Rejected Card List
               </Typography>
             )}
+            {route.pathname === '/grey-card-list/' && (
+              <Typography variant="h6" noWrap component="div">
+                Grey List
+              </Typography>
+            )}
           </Link>
         </Box>
 
