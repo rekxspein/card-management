@@ -1,6 +1,6 @@
 import { Box, LinearProgress, Pagination } from '@mui/material';
 import axios from 'axios';
-import { FC, useEffect } from 'react';
+import { FC } from 'react';
 import { useQuery } from 'react-query';
 import { BASE_API_URL } from '../constant';
 import {
@@ -11,12 +11,26 @@ import {
 } from '@mui/x-data-grid';
 import { Loading } from '../component/Loading';
 import { usePageNumber } from '../store/customPage';
+import { useActiveAirline } from '../store/activeAirline';
+import { usePagination } from '../hooks/usePagination';
 
-const getData = async (pageNumber: number, pageSize: number) => {
+const getData = async (
+  airlines: string[],
+  pageNumber: number,
+  pageSize: number
+) => {
+  // console.log('ASDASSAD', airlines);
+  const maping = {
+    'Air Asia': 1,
+    'Go Airlines': 2,
+    'Air Asia,Go Airlines': 12,
+    'Go Airliens,Air Asia': 12
+  };
+  const a = airlines.toString();
   return await axios
     .get(
       BASE_API_URL +
-        `transaction_list/airlines=1?page=${pageNumber}&size=${pageSize}`
+        `transaction_list/airlines=${maping[a]}?page=${pageNumber}&size=${pageSize}`
     )
     .then(r => {
       return r.data;
@@ -26,13 +40,13 @@ const getData = async (pageNumber: number, pageSize: number) => {
 
 export const TransactionListPage: FC = () => {
   const pageNumber = usePageNumber(e => e.pageNumber);
-  const pageSize = usePageNumber(e => e.pageSize);
+  // const pageSize = usePageNumber(e => e.pageSize);
+  const airlines = useActiveAirline(e => e.activeAirline);
+  const { page, pageSize, query, total, setTotal, setPage, setPageSize } =
+    usePagination();
   const { data, isLoading } = useQuery(['getData', pageNumber, pageSize], () =>
-    getData(pageNumber, pageSize)
+    getData(airlines, pageNumber, pageSize)
   );
-  useEffect(() => {
-    getData(pageNumber, pageSize);
-  }, [pageNumber, pageSize]);
 
   if (isLoading) {
     return <Loading />;
@@ -47,19 +61,27 @@ export const TransactionListPage: FC = () => {
       }}
     >
       <DataGrid
-        rows={data.items}
+        rows={data.items || []}
         getRowId={rows => rows._id}
-        columns={column}
-        autoHeight
-        disableColumnMenu
-        pagination
         loading={isLoading}
+        columns={column}
+        getRowHeight={() => 'auto'}
+        rowsPerPageOptions={[20, 30, 50]}
+        rowCount={total}
+        pagination
+        page={page}
+        pageSize={pageSize}
+        paginationMode="server"
+        onPageChange={setPage}
+        onPageSizeChange={setPageSize}
+        disableSelectionOnClick
+        disableColumnMenu
+        disableColumnFilter
         components={{
           Pagination: CustomPagination,
           LoadingOverlay: LinearProgress,
           Toolbar: GridToolbar
         }}
-        disableSelectionOnClick
       />
     </Box>
   );
