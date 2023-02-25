@@ -17,7 +17,6 @@ import MenuIcon from '@mui/icons-material/Menu';
 
 import React, { FC } from 'react';
 import { useLocation } from 'react-router-dom';
-import { useUiState } from '../store/ui.state';
 import { RouterLink } from './RouterLink';
 
 import OutlinedInput from '@mui/material/OutlinedInput';
@@ -26,6 +25,8 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import Chip from '@mui/material/Chip';
+import { useUiState } from '../store/ui.state';
+import { useActiveAirline } from '../store/activeAirline';
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -33,11 +34,11 @@ const MenuProps = {
   PaperProps: {
     style: {
       maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 250
+      width: 200
     }
   }
 };
-const names = ['Air Asia', 'Go Fast', 'Go Air'];
+const names = ['Air Asia', 'Go Airlines'];
 
 function getStyles(name: string, personName: readonly string[], theme: Theme) {
   return {
@@ -53,16 +54,13 @@ export const SideDrawer: FC = () => {
   const location = useLocation();
 
   const theme = useTheme();
-  const [personName, setPersonName] = React.useState<string[]>([]);
-
-  const handleChange = (event: SelectChangeEvent<typeof personName>) => {
+  const activeAirline = useActiveAirline(e => e.activeAirline);
+  const setActiveAirline = useActiveAirline(e => e.setActiveAirline);
+  const handleChange = (event: SelectChangeEvent<typeof activeAirline>) => {
     const {
       target: { value }
     } = event;
-    setPersonName(
-      // On autofill we get a stringified value.
-      typeof value === 'string' ? value.split(',') : value
-    );
+    setActiveAirline(typeof value === 'string' ? value.split(',') : value);
   };
 
   return (
@@ -94,7 +92,7 @@ export const SideDrawer: FC = () => {
             labelId="demo-multiple-chip-label"
             id="demo-multiple-chip"
             multiple
-            value={personName}
+            value={activeAirline}
             onChange={handleChange}
             input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
             renderValue={selected => (
@@ -110,7 +108,7 @@ export const SideDrawer: FC = () => {
               <MenuItem
                 key={name}
                 value={name}
-                style={getStyles(name, personName, theme)}
+                style={getStyles(name, activeAirline, theme)}
               >
                 {name}
               </MenuItem>
