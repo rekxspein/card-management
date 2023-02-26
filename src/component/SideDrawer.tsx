@@ -27,6 +27,7 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 import Chip from '@mui/material/Chip';
 import { useUiState } from '../store/ui.state';
 import { useActiveAirline } from '../store/activeAirline';
+import { AIRLINES } from '../constant';
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -38,7 +39,6 @@ const MenuProps = {
     }
   }
 };
-const availableAirlines = ['Air Asia', 'Go Airlines'];
 
 function getStyles(name: string, personName: readonly string[], theme: Theme) {
   return {
@@ -60,7 +60,8 @@ export const SideDrawer: FC = () => {
     const {
       target: { value }
     } = event;
-    setActiveAirline(typeof value === 'string' ? value.split(',') : value);
+
+    setActiveAirline(value);
   };
 
   return (
@@ -89,8 +90,8 @@ export const SideDrawer: FC = () => {
         >
           <InputLabel id="demo-multiple-chip-label">Airlines</InputLabel>
           <Select
-            labelId="demo-multiple-chip-label"
-            id="demo-multiple-chip"
+            labelId="multiple-airline-chip-label"
+            id="multiple-airline-id-chip"
             multiple
             value={activeAirline}
             onChange={handleChange}
@@ -98,16 +99,16 @@ export const SideDrawer: FC = () => {
             renderValue={selected => (
               <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
                 {selected.map(value => (
-                  <Chip key={value} label={value} />
+                  <Chip key={value} label={AIRLINES[value]} />
                 ))}
               </Box>
             )}
             MenuProps={MenuProps}
           >
-            {availableAirlines.map(name => (
+            {Object.entries(AIRLINES).map(([key, name]) => (
               <MenuItem
-                key={name}
-                value={name}
+                key={key}
+                value={key}
                 style={getStyles(name, activeAirline, theme)}
               >
                 {name}
