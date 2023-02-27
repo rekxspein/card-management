@@ -1,12 +1,13 @@
 import create from 'zustand';
+import { AIRLINES } from '../constant';
 
 export const useActiveAirline = create<IAirline>(set => ({
-  activeAirline: ['Air Asia'],
+  activeAirline: [Object.keys(AIRLINES)[0]],
 
   setActiveAirline: (airline: string[]) => set({ activeAirline: airline })
 }));
 
-export type IAirline = {
+type IAirline = {
   activeAirline: string[];
   setActiveAirline: (airline: string[]) => void;
 };
