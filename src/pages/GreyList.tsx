@@ -74,7 +74,6 @@ export const GreyListPage: FC = () => {
         onPageSizeChange={setPageSize}
         disableSelectionOnClick
         disableColumnMenu
-        disableColumnFilter
         components={{
           Pagination: CustomPagination(totalPages, query.pageNo, setPage),
           LoadingOverlay: LinearProgress
