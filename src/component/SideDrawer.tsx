@@ -60,8 +60,9 @@ export const SideDrawer: FC = () => {
     const {
       target: { value }
     } = event;
-
-    setActiveAirline(value);
+    if (typeof value !== 'string') {
+      setActiveAirline(value);
+    }
   };
 
   return (
@@ -99,7 +100,10 @@ export const SideDrawer: FC = () => {
             renderValue={selected => (
               <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
                 {selected.map(value => (
-                  <Chip key={value} label={AIRLINES[value]} />
+                  <Chip
+                    key={value}
+                    label={AIRLINES[value as keyof typeof AIRLINES]}
+                  />
                 ))}
               </Box>
             )}
