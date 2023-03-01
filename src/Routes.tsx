@@ -14,7 +14,7 @@ export const ROUTES: IRoute = {
       component: <CrewsListPage />,
       children: [
         {
-          path: '/:id/details/',
+          path: '/:id/:airline/details/',
           component: <CrewDetailsPage />
         }
       ]

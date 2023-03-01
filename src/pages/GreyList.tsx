@@ -5,7 +5,12 @@ import {
   LinearProgress,
   Pagination
 } from '@mui/material';
-import { DataGrid, GridActionsColDef, GridColDef } from '@mui/x-data-grid';
+import {
+  DataGrid,
+  GridActionsColDef,
+  GridColDef,
+  GridToolbar
+} from '@mui/x-data-grid';
 import axios from 'axios';
 import { FC, useEffect } from 'react';
 import { useQuery } from 'react-query';
@@ -76,7 +81,8 @@ export const GreyListPage: FC = () => {
         disableColumnMenu
         components={{
           Pagination: CustomPagination(totalPages, query.pageNo, setPage),
-          LoadingOverlay: LinearProgress
+          LoadingOverlay: LinearProgress,
+          Toolbar: GridToolbar
         }}
       />
     </Box>
