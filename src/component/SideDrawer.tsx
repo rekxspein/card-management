@@ -52,7 +52,6 @@ function getStyles(name: string, personName: readonly string[], theme: Theme) {
 export const SideDrawer: FC = () => {
   const ui = useUiState();
   const location = useLocation();
-
   const theme = useTheme();
   const activeAirline = useActiveAirline(e => e.activeAirline);
   const setActiveAirline = useActiveAirline(e => e.setActiveAirline);

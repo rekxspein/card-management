@@ -14,27 +14,37 @@ import axios from 'axios';
 import { FC } from 'react';
 import { useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
-import { Loading } from '../component/Loading';
 import { BASE_API_URL } from '../constant';
+import { useActiveAirline } from '../store/activeAirline';
 
-const getData = async (id: string | undefined) => {
-  return await axios
-    .get(BASE_API_URL + `find_by_empid/airlines=1/emp_id=${id}`)
-    .then(r => {
-      return r.data;
-    })
-    .catch(error => error);
+const getData = async (
+  id: string | undefined,
+  airlines: string[],
+  airline: string | undefined
+) => {
+  const res = await axios.get<
+    [
+      {
+        id: string;
+        EmployeeName: string;
+        EmployeeId: number;
+        CardNumber: string;
+        CardHolderName: string;
+        Amount: number;
+        Status: string;
+      }
+    ]
+  >(BASE_API_URL + `find_by_empid/airlines=${airline}/emp_id=${id}`);
+
+  return res.data;
 };
 
 export const CrewDetailsPage: FC = () => {
-  const { id } = useParams();
-  const { data, isLoading } = useQuery(['getData', id], () => getData(id), {
-    keepPreviousData: true
-  });
-
-  if (isLoading) {
-    return <Loading />;
-  }
+  const { id, airline } = useParams();
+  const airlines = useActiveAirline(e => e.activeAirline);
+  const { data, isLoading } = useQuery(['getData', id, airlines, airline], () =>
+    getData(id, airlines, airline)
+  );
   return (
     <Box
       sx={{
@@ -67,10 +77,10 @@ export const CrewDetailsPage: FC = () => {
             <TableHead>
               <TableRow>
                 <TableCell>
-                  Crew Name : {data[0]?.EmployeeName ?? 'N/A'}
+                  Crew Name : {(data && data[0]?.EmployeeName) ?? 'N/A'}
                 </TableCell>
                 <TableCell align="right">
-                  Employee ID : {data[0]?.EmployeeId ?? 'N/A'}
+                  Employee ID : {(data && data[0]?.EmployeeId) ?? 'N/A'}
                 </TableCell>
               </TableRow>
             </TableHead>
@@ -78,7 +88,7 @@ export const CrewDetailsPage: FC = () => {
         </TableContainer>
       </Box>
       <DataGrid
-        rows={data}
+        rows={data ?? []}
         columns={column}
         autoHeight
         disableColumnMenu

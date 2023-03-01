@@ -60,7 +60,7 @@ export const CrewsListPage: FC = () => {
         getRowId={rows => rows._id}
         autoHeight
         loading={isLoading}
-        columns={column}
+        columns={columnFunction()}
         rowCount={total}
         pagination
         page={page}
@@ -79,48 +79,57 @@ export const CrewsListPage: FC = () => {
   );
 };
 
-const column = new Array<GridColDef | GridActionsColDef>(
-  {
-    field: 'actions',
-    headerName: 'View',
-    type: 'actions',
-    width: 100,
-    getActions: e => {
-      if (e.row.employeeCode) {
-        return [
-          <IconButton
-            href={`/crews/${e.row.employeeId ?? ''}/details/`}
-            color="primary"
-          >
-            <Visibility />
-          </IconButton>
-        ];
-      } else {
-        return [];
+const columnFunction = () => {
+  return new Array<GridColDef | GridActionsColDef>(
+    {
+      field: 'actions',
+      headerName: 'View',
+      type: 'actions',
+      width: 100,
+      getActions: e => {
+        if (e.row.employeeCode) {
+          return [
+            <IconButton
+              href={`/crews/${e.row.employeeId}/${
+                e.row.MerchantName === 'AIRASIA INDIA LIMITED' ? 1 : 2
+              }/details/`}
+              color="primary"
+            >
+              <Visibility />
+            </IconButton>
+          ];
+        } else {
+          return [];
+        }
       }
+    },
+    {
+      field: 'employeeId',
+      headerName: 'Employee ID',
+      width: 120
+    },
+    {
+      field: 'employeeName',
+      headerName: 'Employee Name',
+      width: 300
+    },
+    {
+      field: 'employeeCode',
+      headerName: 'Employee Code',
+      width: 200
+    },
+    {
+      field: 'position',
+      headerName: 'Position',
+      width: 150
+    },
+    {
+      field: 'MerchantName',
+      headerName: 'Merchant Name',
+      width: 250
     }
-  },
-  {
-    field: 'employeeId',
-    headerName: 'Employee ID',
-    width: 120
-  },
-  {
-    field: 'employeeName',
-    headerName: 'Employee Name',
-    width: 300
-  },
-  {
-    field: 'employeeCode',
-    headerName: 'Employee Code',
-    width: 300
-  },
-  {
-    field: 'position',
-    headerName: 'Position',
-    width: 300
-  }
-);
+  );
+};
 
 const CustomPagination = (
   totalPages: number,
