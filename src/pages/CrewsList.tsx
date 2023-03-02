@@ -1,12 +1,19 @@
-import { Box, IconButton, LinearProgress, Pagination } from '@mui/material';
+import {
+  Box,
+  Button,
+  IconButton,
+  LinearProgress,
+  Pagination
+} from '@mui/material';
 import axios from 'axios';
 import { FC, useEffect } from 'react';
 import { useQuery } from 'react-query';
 import { AIRLINES, BASE_API_URL } from '../constant';
 import { DataGrid, GridActionsColDef, GridColDef } from '@mui/x-data-grid';
-import { Visibility } from '@mui/icons-material';
+import { Download, Visibility } from '@mui/icons-material';
 import { usePagination } from '../hooks/usePagination';
 import { useActiveAirline } from '../store/activeAirline';
+import { toast } from 'react-toastify';
 
 const getData = async (
   airlines: string[],
@@ -25,6 +32,8 @@ const getData = async (
 
 export const CrewsListPage: FC = () => {
   const airlines = useActiveAirline(e => e.activeAirline);
+  const airlinesIds = Object.keys(AIRLINES);
+  const mapping = airlines.map(a => airlinesIds.indexOf(a) + 1).join('');
   const {
     page,
     query,
@@ -55,6 +64,63 @@ export const CrewsListPage: FC = () => {
         flexDirection: 'column'
       }}
     >
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'space-between'
+        }}
+      >
+        <Box></Box>
+        <Button
+          id="create-order-orderlist-btn"
+          sx={{ m: 1 }}
+          variant="contained"
+          startIcon={<Download />}
+          onClick={() => {
+            if (mapping === '12' || mapping === '21') {
+              toast.error('Please select only one Airline', {
+                position: 'bottom-left',
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: 'dark'
+              });
+            } else {
+              axios({
+                url: `https://api-cardmanagement.ngopos.com/download/crew_list/airlines=${mapping}`,
+                method: 'GET',
+                responseType: 'blob'
+              }).then(response => {
+                const href = URL.createObjectURL(response.data);
+
+                const link = document.createElement('a');
+                link.href = href;
+                link.setAttribute('download', `Airline-${mapping}.csv`);
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                URL.revokeObjectURL(href);
+              });
+              toast.success(`Download Successfull`, {
+                position: 'bottom-left',
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: 'dark'
+              });
+            }
+          }}
+        >
+          Download
+        </Button>
+      </Box>
       <DataGrid
         rows={data?.items ?? []}
         getRowId={rows => rows._id}
