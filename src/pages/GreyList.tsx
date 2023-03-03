@@ -27,7 +27,7 @@ const getData = async (
 
   const res = await axios.get<{ items: any[]; total: number }>(
     BASE_API_URL +
-      `black_cards/airlines=${mapping}?page=${query.pageNo}&size=${query.pageSize}`
+      `black_cards/?airline_id=${mapping}&page=${query.pageNo}&size=${query.pageSize}`
   );
 
   return res.data;

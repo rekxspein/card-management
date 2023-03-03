@@ -10,7 +10,7 @@ export const ROUTES: IRoute = {
   component: <TransactionListPage />,
   children: [
     {
-      path: '/crews',
+      path: '/crew-transactions',
       component: <CrewsListPage />,
       children: [
         {
@@ -20,11 +20,11 @@ export const ROUTES: IRoute = {
       ]
     },
     {
-      path: '/rejected-card-list/',
+      path: '/declined-cards/',
       component: <DeclinedCardListPage />
     },
     {
-      path: '/grey-card-list/',
+      path: '/grey-cards/',
       component: <GreyListPage />
     }
   ]

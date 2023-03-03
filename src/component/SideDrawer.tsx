@@ -127,18 +127,18 @@ export const SideDrawer: FC = () => {
             component={RouterLink}
           >
             <ListItemIcon>
-              <Tooltip title="Transaction List" placement="right">
+              <Tooltip title="Transactions" placement="right">
                 <IconButton>
                   <Icon>account_balance</Icon>
                 </IconButton>
               </Tooltip>
             </ListItemIcon>
-            <ListItemText primary="Transaction List" />
+            <ListItemText primary="Transactions" />
           </ListItemButton>
 
           <ListItemButton
-            href="/crews/"
-            selected={location.pathname.startsWith('/crews')}
+            href="/crew-transactions/"
+            selected={location.pathname.startsWith('/crew-transactions')}
             component={RouterLink}
           >
             <ListItemIcon>
@@ -152,33 +152,33 @@ export const SideDrawer: FC = () => {
           </ListItemButton>
 
           <ListItemButton
-            href="/rejected-card-list/"
-            selected={location.pathname.startsWith('/rejected-card-list')}
+            href="/declined-cards/"
+            selected={location.pathname.startsWith('/declined-cards')}
             component={RouterLink}
           >
             <ListItemIcon>
-              <Tooltip title="Rejected Card List" placement="right">
+              <Tooltip title="Declined Cards" placement="right">
                 <IconButton>
                   <Icon>unpublished</Icon>
                 </IconButton>
               </Tooltip>
             </ListItemIcon>
-            <ListItemText primary="Declined Card List" />
+            <ListItemText primary="Declined Cards" />
           </ListItemButton>
 
           <ListItemButton
-            href="/grey-card-list/"
-            selected={location.pathname.startsWith('/grey-card-list')}
+            href="/grey-cards/"
+            selected={location.pathname.startsWith('/grey-cards')}
             component={RouterLink}
           >
             <ListItemIcon>
-              <Tooltip title="Grey List" placement="right">
+              <Tooltip title="Grey Cards" placement="right">
                 <IconButton>
                   <Icon>block</Icon>
                 </IconButton>
               </Tooltip>
             </ListItemIcon>
-            <ListItemText primary="Grey List" />
+            <ListItemText primary="Grey Cards" />
           </ListItemButton>
         </List>
       </Drawer>
