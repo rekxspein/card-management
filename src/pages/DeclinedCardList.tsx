@@ -21,7 +21,7 @@ const getData = async (
 
   const res = await axios.get<{ items: any[]; total: number }>(
     BASE_API_URL +
-      `declinedcardlist/airlines=${mapping}?page=${query.pageNo}&size=${query.pageSize}`
+      `declinedcardlist/?airline_id=${mapping}&page=${query.pageNo}&size=${query.pageSize}`
   );
 
   return res.data;
