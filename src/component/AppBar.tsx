@@ -42,22 +42,22 @@ export const TopBar: FC = () => {
           >
             {route.pathname === '/' && (
               <Typography variant="h6" noWrap component="div">
-                Transaction List
+                Transactions
               </Typography>
             )}
-            {route.pathname === '/crews/' && (
+            {route.pathname === '/crew-transactions/' && (
               <Typography variant="h6" noWrap component="div">
-                Crew List
+                Crew Transactions
               </Typography>
             )}
-            {route.pathname === '/rejected-card-list/' && (
+            {route.pathname === '/declined-cards/' && (
               <Typography variant="h6" noWrap component="div">
-                Rejected Card List
+                Declined Cards
               </Typography>
             )}
-            {route.pathname === '/grey-card-list/' && (
+            {route.pathname === '/grey-cards/' && (
               <Typography variant="h6" noWrap component="div">
-                Grey List
+                Grey Cards
               </Typography>
             )}
           </Link>

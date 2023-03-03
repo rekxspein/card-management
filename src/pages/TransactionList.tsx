@@ -3,12 +3,7 @@ import axios from 'axios';
 import { FC, useEffect } from 'react';
 import { useQuery } from 'react-query';
 import { AIRLINES, BASE_API_URL } from '../constant';
-import {
-  DataGrid,
-  GridActionsColDef,
-  GridColDef,
-  GridToolbar
-} from '@mui/x-data-grid';
+import { DataGrid, GridActionsColDef, GridColDef } from '@mui/x-data-grid';
 import { useActiveAirline } from '../store/activeAirline';
 import { usePagination } from '../hooks/usePagination';
 
@@ -75,8 +70,7 @@ export const TransactionListPage: FC = () => {
         disableColumnMenu
         components={{
           Pagination: CustomPagination(totalPages, query.pageNo, setPage),
-          LoadingOverlay: LinearProgress,
-          Toolbar: GridToolbar
+          LoadingOverlay: LinearProgress
         }}
       />
     </Box>

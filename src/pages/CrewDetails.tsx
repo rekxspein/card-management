@@ -9,7 +9,7 @@ import {
   TableHead,
   TableRow
 } from '@mui/material';
-import { DataGrid, GridColDef, GridToolbar } from '@mui/x-data-grid';
+import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import axios from 'axios';
 import { FC } from 'react';
 import { useQuery } from 'react-query';
@@ -97,8 +97,7 @@ export const CrewDetailsPage: FC = () => {
         getRowId={row => row.id}
         getRowHeight={() => 'auto'}
         components={{
-          LoadingOverlay: LinearProgress,
-          Toolbar: GridToolbar
+          LoadingOverlay: LinearProgress
         }}
       />
     </Box>
