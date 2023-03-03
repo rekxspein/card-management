@@ -1,16 +1,5 @@
-import {
-  Box,
-  Icon,
-  IconButton,
-  LinearProgress,
-  Pagination
-} from '@mui/material';
-import {
-  DataGrid,
-  GridActionsColDef,
-  GridColDef,
-  GridToolbar
-} from '@mui/x-data-grid';
+import { Box, LinearProgress, Pagination } from '@mui/material';
+import { DataGrid, GridActionsColDef, GridColDef } from '@mui/x-data-grid';
 import axios from 'axios';
 import { FC, useEffect } from 'react';
 import { useQuery } from 'react-query';
@@ -81,8 +70,7 @@ export const GreyListPage: FC = () => {
         disableColumnMenu
         components={{
           Pagination: CustomPagination(totalPages, query.pageNo, setPage),
-          LoadingOverlay: LinearProgress,
-          Toolbar: GridToolbar
+          LoadingOverlay: LinearProgress
         }}
       />
     </Box>
@@ -90,23 +78,6 @@ export const GreyListPage: FC = () => {
 };
 
 const column = new Array<GridColDef | GridActionsColDef>(
-  {
-    field: 'actions',
-    headerName: 'Action',
-    type: 'actions',
-    width: 100,
-    getActions: e => {
-      if (e.row.CardNumber) {
-        return [
-          <IconButton href={``} color="primary">
-            <Icon>wb_incandescent</Icon>
-          </IconButton>
-        ];
-      } else {
-        return []; // This will prevent rendering of this Cell before data is fetched
-      }
-    }
-  },
   {
     field: 'CardNumber',
     headerName: 'Card Number',
