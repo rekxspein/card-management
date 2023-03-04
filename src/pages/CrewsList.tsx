@@ -91,30 +91,43 @@ export const CrewsListPage: FC = () => {
               });
             } else {
               axios({
-                url: `https://api-cardmanagement.ngopos.com/download/crew_list/airlines=${mapping}`,
+                url: `https://api-cardmanagement.ngopos.com/download/crew_list/?airline_id=${mapping}`,
                 method: 'GET',
                 responseType: 'blob'
-              }).then(response => {
-                const href = URL.createObjectURL(response.data);
+              })
+                .then(response => {
+                  const href = URL.createObjectURL(response.data);
 
-                const link = document.createElement('a');
-                link.href = href;
-                link.setAttribute('download', `Airline-${mapping}.csv`);
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-                URL.revokeObjectURL(href);
-              });
-              toast.success(`Download Successfull`, {
-                position: 'bottom-left',
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: 'dark'
-              });
+                  const link = document.createElement('a');
+                  link.href = href;
+                  link.setAttribute('download', `Airline-${mapping}.csv`);
+                  document.body.appendChild(link);
+                  link.click();
+                  document.body.removeChild(link);
+                  URL.revokeObjectURL(href);
+                  toast.success(`Download Successfull`, {
+                    position: 'bottom-left',
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: 'dark'
+                  });
+                })
+                .catch(err => {
+                  toast.error(`${err}`, {
+                    position: 'bottom-left',
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: 'dark'
+                  });
+                });
             }
           }}
         >
