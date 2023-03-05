@@ -100,7 +100,8 @@ export const CrewsListPage: FC = () => {
 
                   const link = document.createElement('a');
                   link.href = href;
-                  link.setAttribute('download', `Airline-${mapping}.csv`);
+                  const dwn = mapping === '1' ? 'Air-Asia' : 'Go-Airlines';
+                  link.setAttribute('download', `${dwn}.csv`);
                   document.body.appendChild(link);
                   link.click();
                   document.body.removeChild(link);
