@@ -68,10 +68,9 @@ export const CrewsListPage: FC = () => {
         sx={{
           display: 'flex',
           flexDirection: 'row',
-          justifyContent: 'space-between'
+          justifyContent: 'flex-end'
         }}
       >
-        <Box></Box>
         <Button
           id="create-order-orderlist-btn"
           sx={{ m: 1 }}
