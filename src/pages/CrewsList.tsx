@@ -169,7 +169,7 @@ const columnFunction = () => {
         if (e.row.employeeCode) {
           return [
             <IconButton
-              href={`/crews/${e.row.employeeId}/${
+              href={`/crew-transactions/${e.row.employeeId}/${
                 e.row.MerchantName === 'AIRASIA INDIA LIMITED' ? 1 : 2
               }/details/`}
               color="primary"
