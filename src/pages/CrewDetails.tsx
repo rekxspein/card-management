@@ -66,7 +66,7 @@ export const CrewDetailsPage: FC = () => {
           id="create-order-orderlist-btn"
           sx={{ m: 1 }}
           variant="contained"
-          href="/crews"
+          href="/crew-transactions/"
         >
           &lt; Back
         </Button>
