@@ -17,6 +17,7 @@ import { Download } from '@mui/icons-material';
 import { toast } from 'react-toastify';
 import { Moment } from 'moment';
 import { DesktopDatePicker } from '@mui/x-date-pickers';
+import { useLocation } from 'react-router-dom';
 
 const getData = async (
   airlines: string[],
@@ -34,9 +35,13 @@ const getData = async (
 };
 
 export const TransactionListPage: FC = () => {
-  const airlines = useActiveAirline(e => e.activeAirline);
+  const selectedAirlines = useActiveAirline(e => e.activeAirline);
   const airlinesIds = Object.keys(AIRLINES);
-  const mapping = airlines.map(a => airlinesIds.indexOf(a) + 1).join('');
+  const mapping = selectedAirlines
+    .map(a => airlinesIds.indexOf(a) + 1)
+    .join('');
+  const location = useLocation();
+  const fileName = location.pathname.replaceAll('/', '');
   const [startDate, setStartDate] = useState<Moment | null>(null);
   const [endDate, setEndDate] = useState<Moment | null>(null);
   const {
@@ -51,8 +56,9 @@ export const TransactionListPage: FC = () => {
   } = usePagination({
     pageSize: 20
   });
-  const { data, isLoading } = useQuery(['getData', query, airlines], () =>
-    getData(airlines, query)
+  const { data, isLoading } = useQuery(
+    ['getData', query, selectedAirlines],
+    () => getData(selectedAirlines, query)
   );
 
   useEffect(() => {
@@ -140,8 +146,13 @@ export const TransactionListPage: FC = () => {
                 const href = URL.createObjectURL(response.data);
                 const link = document.createElement('a');
                 link.href = href;
-                const dwn = mapping === '1' ? 'Air-Asia' : 'Go-Airlines';
-                link.setAttribute('download', `${dwn}.csv`);
+                const selectedIdx = selectedAirlines.map(a => a);
+                const downloadName =
+                  AIRLINES[selectedIdx.toString() as keyof typeof AIRLINES];
+                link.setAttribute(
+                  'download',
+                  `${downloadName}-${fileName === '' ? 'Transactions' : ''}.csv` //transaction route is '/' so need to set
+                );
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
