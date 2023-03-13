@@ -1,10 +1,19 @@
 import create from 'zustand';
 import { AIRLINES } from '../constant';
 
-export const useActiveAirline = create<IAirline>(set => ({
-  activeAirline: [Object.keys(AIRLINES)[0]],
+export const useActiveAirline = create<IAirline>((set, get) => ({
+  activeAirline: (() => {
+    const storedValue = sessionStorage.getItem('activeAirline');
+    if (storedValue) {
+      return JSON.parse(storedValue);
+    }
+    return [Object.keys(AIRLINES)[0]];
+  })(),
 
-  setActiveAirline: (airline: string[]) => set({ activeAirline: airline })
+  setActiveAirline: (airline: string[]) => {
+    sessionStorage.setItem('activeAirline', JSON.stringify(airline));
+    set({ activeAirline: airline });
+  }
 }));
 
 type IAirline = {
