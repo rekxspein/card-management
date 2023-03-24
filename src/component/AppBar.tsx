@@ -60,6 +60,11 @@ export const TopBar: FC = () => {
                 Grey Cards
               </Typography>
             )}
+            {route.pathname === '/csv-upload/' && (
+              <Typography variant="h6" noWrap component="div">
+                CSV Upload
+              </Typography>
+            )}
           </Link>
         </Box>
 
