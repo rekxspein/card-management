@@ -180,6 +180,21 @@ export const SideDrawer: FC = () => {
             </ListItemIcon>
             <ListItemText primary="Grey Cards" />
           </ListItemButton>
+
+          <ListItemButton
+            href="/csv-upload/"
+            selected={location.pathname.startsWith('/csv-upload/')}
+            component={RouterLink}
+          >
+            <ListItemIcon>
+              <Tooltip title="CSV Upload" placement="right">
+                <IconButton>
+                  <Icon>upload_file</Icon>
+                </IconButton>
+              </Tooltip>
+            </ListItemIcon>
+            <ListItemText primary="CSV Upload" />
+          </ListItemButton>
         </List>
       </Drawer>
     </>
