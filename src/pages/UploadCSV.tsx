@@ -1,9 +1,14 @@
 import { Add } from '@mui/icons-material';
-import { Fab, Typography } from '@mui/material';
+import { Fab, Paper, Typography } from '@mui/material';
 import { Box } from '@mui/system';
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 
 export const UploadCSV: FC = () => {
+  const [fileName, setFileName] = useState('');
+  const handleFileInputChange = (event: any) => {
+    const file = event.target.files[0];
+    setFileName(file.name);
+  };
   return (
     <Box
       sx={{
@@ -24,9 +29,9 @@ export const UploadCSV: FC = () => {
         }}
       >
         <Box>
-          <Typography
-            sx={{ fontStyle: 'italic', fontWeight: 100 }}
-          ></Typography>
+          <Typography sx={{ fontStyle: 'italic', fontWeight: 100 }}>
+            Please select CSV file by clicking the add button
+          </Typography>
         </Box>
       </Box>
       <label htmlFor="upload-photo">
@@ -35,7 +40,13 @@ export const UploadCSV: FC = () => {
           id="upload-photo"
           name="upload-photo"
           type="file"
+          onChange={handleFileInputChange}
         />
+        {fileName && (
+          <Paper elevation={3} sx={{ m: '5px', p: '5px', maxWidth: '300px' }}>
+            Selected file: {fileName}
+          </Paper>
+        )}
         <Fab
           color="primary"
           size="small"
@@ -43,7 +54,7 @@ export const UploadCSV: FC = () => {
           aria-label="add"
           variant="extended"
         >
-          <Add /> Upload CSV
+          <Add /> Add
         </Fab>
       </label>
     </Box>
