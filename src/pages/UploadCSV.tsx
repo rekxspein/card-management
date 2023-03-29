@@ -1,14 +1,13 @@
-import { Add } from '@mui/icons-material';
-import { Fab, Paper, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import { Box } from '@mui/system';
-import React, { FC, useState } from 'react';
+import React, { FC, useCallback } from 'react';
+import { useDropzone } from 'react-dropzone';
 
 export const UploadCSV: FC = () => {
-  const [fileName, setFileName] = useState('');
-  const handleFileInputChange = (event: any) => {
-    const file = event.target.files[0];
-    setFileName(file.name);
-  };
+  const onDrop = useCallback((acceptedFiles: any) => {
+    // Do something with the files
+  }, []);
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
   return (
     <Box
       sx={{
@@ -34,29 +33,14 @@ export const UploadCSV: FC = () => {
           </Typography>
         </Box>
       </Box>
-      <label htmlFor="upload-photo">
-        <input
-          style={{ display: 'none' }}
-          id="upload-photo"
-          name="upload-photo"
-          type="file"
-          onChange={handleFileInputChange}
-        />
-        {fileName && (
-          <Paper elevation={3} sx={{ m: '5px', p: '5px', maxWidth: '300px' }}>
-            Selected file: {fileName}
-          </Paper>
+      <Box {...getRootProps()}>
+        <input {...getInputProps()} />
+        {isDragActive ? (
+          <p>Drop the files here ...</p>
+        ) : (
+          <p>Drag 'n' drop some files here, or click to select files</p>
         )}
-        <Fab
-          color="primary"
-          size="small"
-          component="span"
-          aria-label="add"
-          variant="extended"
-        >
-          <Add /> Add
-        </Fab>
-      </label>
+      </Box>
     </Box>
   );
 };
