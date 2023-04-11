@@ -12,8 +12,7 @@ export const UploadCSV: FC = () => {
   const { getRootProps, getInputProps, isDragActive, isFileDialogActive } =
     useDropzone({
       onDrop,
-      multiple: false,
-      accept: '.csv'
+      multiple: false
     });
   return (
     <Box
