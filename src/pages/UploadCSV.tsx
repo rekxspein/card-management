@@ -1,13 +1,9 @@
-import { Typography } from '@mui/material';
-import { Box } from '@mui/system';
-import React, { FC, useCallback } from 'react';
-import { useDropzone } from 'react-dropzone';
+import React from 'react';
+import { Box, Fab } from '@mui/material';
+import { PostAdd, UploadFileOutlined } from '@mui/icons-material';
+import LoadingButton from '@mui/lab/LoadingButton';
 
-export const UploadCSV: FC = () => {
-  const onDrop = useCallback((acceptedFiles: any) => {
-    // Do something with the files
-  }, []);
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
+const UploadCSV: React.FC = () => {
   return (
     <Box
       sx={{
@@ -15,32 +11,52 @@ export const UploadCSV: FC = () => {
         width: '100%',
         display: 'flex',
         flexDirection: 'column',
-        margin: 2
+        margin: 2,
+        alignItems: 'normal',
+        border: '3px dashed #747c85'
       }}
     >
       <Box
         sx={{
           display: 'flex',
-          flexDirection: 'row',
-          justifyContent: 'flex-end',
-          alignItems: 'baseline',
-          gap: 2
+          justifyContent: 'space-around',
+          gap: 2,
+          minWidth: '380px',
+          padding: '1em'
         }}
       >
-        <Box>
-          <Typography sx={{ fontStyle: 'italic', fontWeight: 100 }}>
-            Please select CSV file by clicking the add button
-          </Typography>
-        </Box>
-      </Box>
-      <Box {...getRootProps()}>
-        <input {...getInputProps()} />
-        {isDragActive ? (
-          <p>Drop the files here ...</p>
-        ) : (
-          <p>Drag 'n' drop some files here, or click to select files</p>
-        )}
+        <label htmlFor="file-input">
+          <input
+            style={{ display: 'none' }}
+            id="file-input"
+            name="file-input"
+            type="file"
+            accept=".csv"
+            capture="environment"
+          />
+          <Fab
+            color="primary"
+            size="small"
+            component="span"
+            aria-label="add"
+            variant="extended"
+          >
+            <PostAdd />
+            Select CSV
+          </Fab>
+        </label>
+        <LoadingButton
+          size="small"
+          startIcon={<UploadFileOutlined />}
+          loading={false}
+          loadingPosition="start"
+          variant="contained"
+        >
+          <span>Upload</span>
+        </LoadingButton>
       </Box>
     </Box>
   );
 };
+
+export default UploadCSV;
