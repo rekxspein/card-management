@@ -78,7 +78,7 @@ export const GreyListPage: FC = () => {
           onClick={() => {
             if (mapping === '12' || mapping === '21') {
               toast.error('Please select only one Airline', {
-                position: 'bottom-left',
+                position: 'bottom-right',
                 autoClose: 5000,
                 hideProgressBar: false,
                 closeOnClick: true,
@@ -110,7 +110,7 @@ export const GreyListPage: FC = () => {
                   document.body.removeChild(link);
                   URL.revokeObjectURL(href);
                   toast.success(`Download Successfull`, {
-                    position: 'bottom-left',
+                    position: 'bottom-right',
                     autoClose: 5000,
                     hideProgressBar: false,
                     closeOnClick: true,
@@ -122,7 +122,7 @@ export const GreyListPage: FC = () => {
                 })
                 .catch(err => {
                   toast.error(`${err}`, {
-                    position: 'bottom-left',
+                    position: 'bottom-right',
                     autoClose: 5000,
                     hideProgressBar: false,
                     closeOnClick: true,
