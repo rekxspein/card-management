@@ -4,7 +4,7 @@ import { CrewDetailsPage } from './pages/CrewDetails';
 import { TransactionListPage } from './pages/TransactionList';
 import { DeclinedCardListPage } from './pages/DeclinedCardList';
 import { GreyListPage } from './pages/GreyList';
-import { UploadCSV } from './pages/UploadCSV';
+import UploadCSV from './pages/UploadCSV';
 
 export const ROUTES: IRoute = {
   path: '/',
