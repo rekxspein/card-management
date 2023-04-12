@@ -117,7 +117,7 @@ export const TransactionListPage: FC = () => {
           onClick={() => {
             if (mapping === '12' || mapping === '21') {
               toast.error('Please select only one Airline', {
-                position: 'bottom-left',
+                position: 'bottom-right',
                 autoClose: 5000,
                 hideProgressBar: false,
                 closeOnClick: true,
@@ -128,7 +128,7 @@ export const TransactionListPage: FC = () => {
               });
             } else if (startDate === null || endDate === null) {
               toast.error('Please select both the dates', {
-                position: 'bottom-left',
+                position: 'bottom-right',
                 autoClose: 5000,
                 hideProgressBar: false,
                 closeOnClick: true,
@@ -158,7 +158,7 @@ export const TransactionListPage: FC = () => {
                 document.body.removeChild(link);
                 URL.revokeObjectURL(href);
                 toast.success(`Download Successfull`, {
-                  position: 'bottom-left',
+                  position: 'bottom-right',
                   autoClose: 5000,
                   hideProgressBar: false,
                   closeOnClick: true,
