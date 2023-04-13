@@ -130,6 +130,15 @@ const UploadCSV: React.FC = () => {
             Select CSV
           </Fab>
         </label>
+        <Box fontStyle={'italic'} fontWeight={100} fontSize={18}>
+          {selectedFile?.name
+            ? 'File Name: ' +
+              selectedFile?.name +
+              ' | File Size: ' +
+              (selectedFile.size / 1000000).toFixed(1) +
+              ' MB'
+            : '** No file selected'}
+        </Box>
         <LoadingButton
           size="small"
           onClick={handleUpload}
