@@ -10,7 +10,7 @@ import {
 import MenuIcon from '@mui/icons-material/Menu';
 import { FC } from 'react';
 import { useUiState } from '../store/ui.state';
-import { Link, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 export const TopBar: FC = () => {
   const ui = useUiState();
@@ -33,41 +33,17 @@ export const TopBar: FC = () => {
           <MenuIcon />
         </IconButton>
         <Box>
-          <Link
-            to={route.pathname}
-            style={{
-              color: 'white',
-              textDecoration: 'none'
-            }}
-          >
-            {route.pathname === '/' && (
-              <Typography variant="h6" noWrap component="div">
-                Transactions
-              </Typography>
-            )}
-            {route.pathname === '/crew-transactions/' && (
-              <Typography variant="h6" noWrap component="div">
-                Crew Transactions
-              </Typography>
-            )}
-            {route.pathname === '/declined-cards/' && (
-              <Typography variant="h6" noWrap component="div">
-                Declined Cards
-              </Typography>
-            )}
-            {route.pathname === '/grey-cards/' && (
-              <Typography variant="h6" noWrap component="div">
-                Grey Cards
-              </Typography>
-            )}
-            {route.pathname === '/csv-upload/' && (
-              <Typography variant="h6" noWrap component="div">
-                CSV Upload
-              </Typography>
-            )}
-          </Link>
+          {route.pathname === '/' && (
+            <Typography variant="h6" noWrap component="div">
+              TRANSACTIONS
+            </Typography>
+          )}
+          <Typography variant="h6" noWrap component="div">
+            <Typography variant="h6" noWrap component="div">
+              {route.pathname.split('/')[1].toUpperCase()}
+            </Typography>
+          </Typography>
         </Box>
-
         <Box sx={{ flexGrow: 1 }} />
       </Toolbar>
     </AppBar>
