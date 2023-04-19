@@ -16,7 +16,7 @@ import {
 import MenuIcon from '@mui/icons-material/Menu';
 
 import React, { FC } from 'react';
-import { useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { RouterLink } from './RouterLink';
 
 import OutlinedInput from '@mui/material/OutlinedInput';
@@ -68,13 +68,21 @@ export const SideDrawer: FC = () => {
     <>
       <Drawer width={ui.drawerWidth} open={ui.drawerOpen} variant="permanent">
         <DrawerHeader>
-          <Typography
-            sx={{ flexGrow: 1, textAlign: 'center' }}
-            fontWeight={500}
-            fontSize={16}
+          <Link
+            to={'/'}
+            style={{
+              color: 'white',
+              textDecoration: 'none'
+            }}
           >
-            CARD MANAGEMENT
-          </Typography>
+            <Typography
+              sx={{ flexGrow: 1, textAlign: 'center' }}
+              fontWeight={500}
+              fontSize={16}
+            >
+              CARD MANAGEMENT
+            </Typography>
+          </Link>
           <IconButton
             id="sidebar-sidedrawer-toggle-btn"
             onClick={() => ui.setDrawerOpen(false)}
