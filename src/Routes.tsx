@@ -5,6 +5,7 @@ import { TransactionListPage } from './pages/TransactionList';
 import { DeclinedCardListPage } from './pages/DeclinedCardList';
 import { GreyListPage } from './pages/GreyList';
 import UploadCSV from './pages/UploadCSV';
+import { GreyCardsHistoryListPage } from './pages/GreyCardsHistoryList';
 
 export const ROUTES: IRoute = {
   path: '/',
@@ -27,6 +28,10 @@ export const ROUTES: IRoute = {
     {
       path: '/grey-cards/',
       component: <GreyListPage />
+    },
+    {
+      path: '/grey-cards-history/',
+      component: <GreyCardsHistoryListPage />
     },
     {
       path: '/csv-upload/',
