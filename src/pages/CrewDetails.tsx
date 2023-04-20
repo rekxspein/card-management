@@ -42,8 +42,13 @@ const getData = async (
 export const CrewDetailsPage: FC = () => {
   const { id, airline } = useParams();
   const airlines = useActiveAirline(e => e.activeAirline);
-  const { data, isLoading } = useQuery(['getData', id, airlines, airline], () =>
-    getData(id, airlines, airline)
+  const { data, isLoading } = useQuery(
+    ['getData', id, airlines, airline],
+    () => getData(id, airlines, airline),
+    {
+      refetchOnReconnect: true,
+      refetchOnWindowFocus: true
+    }
   );
   return (
     <Box

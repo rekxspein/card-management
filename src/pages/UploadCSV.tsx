@@ -91,6 +91,8 @@ const UploadCSV: React.FC = () => {
       return res.data;
     },
     {
+      refetchOnReconnect: true,
+      refetchOnWindowFocus: true,
       select: d => d?.[0],
       refetchInterval: d => {
         if (d?.Status === 'Processing') {
