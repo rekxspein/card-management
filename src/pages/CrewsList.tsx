@@ -54,7 +54,11 @@ export const CrewsListPage: FC = () => {
 
   const { data, isLoading } = useQuery(
     ['getData', query, selectedAirlines],
-    () => getData(selectedAirlines, query)
+    () => getData(selectedAirlines, query),
+    {
+      refetchOnReconnect: true,
+      refetchOnWindowFocus: true
+    }
   );
 
   useEffect(() => {
