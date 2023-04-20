@@ -176,7 +176,7 @@ export const SideDrawer: FC = () => {
 
           <ListItemButton
             href="/grey-cards/"
-            selected={location.pathname.startsWith('/grey-cards')}
+            selected={location.pathname === '/grey-cards/'}
             component={RouterLink}
           >
             <ListItemIcon>
@@ -187,6 +187,21 @@ export const SideDrawer: FC = () => {
               </Tooltip>
             </ListItemIcon>
             <ListItemText primary="Grey Cards" />
+          </ListItemButton>
+
+          <ListItemButton
+            href="/grey-cards-history/"
+            selected={location.pathname === '/grey-cards-history/'}
+            component={RouterLink}
+          >
+            <ListItemIcon>
+              <Tooltip title="Grey Cards" placement="right">
+                <IconButton>
+                  <Icon>history</Icon>
+                </IconButton>
+              </Tooltip>
+            </ListItemIcon>
+            <ListItemText primary="Grey Cards History" />
           </ListItemButton>
 
           <ListItemButton
