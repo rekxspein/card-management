@@ -1,9 +1,11 @@
 import {
   Box,
   Button,
+  CircularProgress,
+  Icon,
   IconButton,
-  LinearProgress,
-  Pagination
+  Pagination,
+  Typography
 } from '@mui/material';
 import axios from 'axios';
 import { FC, useEffect } from 'react';
@@ -52,18 +54,40 @@ export const CrewsListPage: FC = () => {
     pageSize: 20
   });
 
-  const { data, isLoading } = useQuery(
+  const { data, isLoading, isError, error, isFetching } = useQuery(
     ['getData', query, selectedAirlines],
     () => getData(selectedAirlines, query),
     {
       refetchOnReconnect: true,
-      refetchOnWindowFocus: true
+      refetchOnWindowFocus: true,
+      retry: 2
     }
   );
 
   useEffect(() => {
     setTotal(Math.min(data?.total ?? 0, 100 * pageSize));
   }, [setTotal, data?.total, pageSize]);
+
+  if (isError) {
+    return (
+      <Box
+        sx={{
+          height: '100vh',
+          width: '100%',
+          display: 'flex',
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: 1
+        }}
+      >
+        <Icon>error_outline</Icon>
+        <Typography sx={{ fontStyle: 'italic', fontWeight: 100 }}>
+          {(error as any).message}
+        </Typography>
+      </Box>
+    );
+  }
 
   return (
     <Box
@@ -74,101 +98,124 @@ export const CrewsListPage: FC = () => {
         flexDirection: 'column'
       }}
     >
-      <Box
-        sx={{
-          display: 'flex',
-          flexDirection: 'row',
-          justifyContent: 'flex-end'
-        }}
-      >
-        <Button
-          id="create-order-orderlist-btn"
-          sx={{ m: 1 }}
-          variant="contained"
-          startIcon={<Download />}
-          onClick={() => {
-            if (mapping === '12' || mapping === '21') {
-              toast.error('Please select only one Airline', {
-                position: 'bottom-right',
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: 'dark'
-              });
-            } else {
-              axios({
-                url: `https://api-cardmanagement.ngopos.com/download/crew_list/?airline_id=${mapping}`,
-                method: 'GET',
-                responseType: 'blob'
-              })
-                .then(response => {
-                  const href = URL.createObjectURL(response.data);
-
-                  const link = document.createElement('a');
-                  link.href = href;
-                  const selectedIdx = selectedAirlines.map(a => a);
-                  const downloadName =
-                    AIRLINES[selectedIdx.toString() as keyof typeof AIRLINES];
-                  link.setAttribute(
-                    'download',
-                    `${downloadName}-${fileName}.csv`
-                  );
-                  document.body.appendChild(link);
-                  link.click();
-                  document.body.removeChild(link);
-                  URL.revokeObjectURL(href);
-                  toast.success(`Download Successfull`, {
-                    position: 'bottom-right',
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: 'dark'
-                  });
-                })
-                .catch(err => {
-                  toast.error(`${err}`, {
-                    position: 'bottom-right',
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: 'dark'
-                  });
-                });
-            }
+      {isFetching || isLoading ? (
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            height: '100vh'
           }}
         >
-          Download
-        </Button>
-      </Box>
-      <DataGrid
-        rows={data?.items ?? []}
-        getRowId={rows => rows._id}
-        autoHeight
-        loading={isLoading}
-        columns={columnFunction()}
-        rowCount={total}
-        pagination
-        page={page}
-        pageSize={pageSize}
-        paginationMode="server"
-        onPageChange={setPage}
-        onPageSizeChange={setPageSize}
-        disableSelectionOnClick
-        disableColumnMenu
-        components={{
-          Pagination: CustomPagination(totalPages, query.pageNo, setPage),
-          LoadingOverlay: LinearProgress
-        }}
-      />
+          <CircularProgress />
+        </Box>
+      ) : (
+        <Box
+          sx={{
+            height: '100%',
+            width: '100%',
+            display: 'flex',
+            flexDirection: 'column'
+          }}
+        >
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'flex-end'
+            }}
+          >
+            <Button
+              id="create-order-orderlist-btn"
+              sx={{ m: 1 }}
+              variant="contained"
+              startIcon={<Download />}
+              onClick={() => {
+                if (mapping === '12' || mapping === '21') {
+                  toast.error('Please select only one Airline', {
+                    position: 'bottom-right',
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: 'dark'
+                  });
+                } else {
+                  axios({
+                    url: `https://api-cardmanagement.ngopos.com/download/crew_list/?airline_id=${mapping}`,
+                    method: 'GET',
+                    responseType: 'blob'
+                  })
+                    .then(response => {
+                      const href = URL.createObjectURL(response.data);
+
+                      const link = document.createElement('a');
+                      link.href = href;
+                      const selectedIdx = selectedAirlines.map(a => a);
+                      const downloadName =
+                        AIRLINES[
+                          selectedIdx.toString() as keyof typeof AIRLINES
+                        ];
+                      link.setAttribute(
+                        'download',
+                        `${downloadName}-${fileName}.csv`
+                      );
+                      document.body.appendChild(link);
+                      link.click();
+                      document.body.removeChild(link);
+                      URL.revokeObjectURL(href);
+                      toast.success(`Download Successfull`, {
+                        position: 'bottom-right',
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        theme: 'dark'
+                      });
+                    })
+                    .catch(err => {
+                      toast.error(`${err}`, {
+                        position: 'bottom-right',
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        theme: 'dark'
+                      });
+                    });
+                }
+              }}
+            >
+              Download
+            </Button>
+          </Box>
+          <DataGrid
+            key={data?.items.length}
+            rows={data?.items ?? []}
+            getRowId={rows => rows._id}
+            autoHeight
+            columns={columnFunction()}
+            rowCount={total}
+            pagination
+            page={page}
+            pageSize={pageSize}
+            paginationMode="server"
+            onPageChange={setPage}
+            onPageSizeChange={setPageSize}
+            disableSelectionOnClick
+            disableColumnMenu
+            components={{
+              Pagination: CustomPagination(totalPages, query.pageNo, setPage)
+            }}
+          />
+        </Box>
+      )}
     </Box>
   );
 };
@@ -184,7 +231,7 @@ const columnFunction = () => {
         if (e.row.employeeCode) {
           return [
             <IconButton
-              href={`/crew-transactions/${e.row.employeeId}/${
+              href={`/crew-transactions/${Math.floor(e.row.employeeId)}/${
                 e.row.MerchantName === 'AIRASIA INDIA LIMITED' ? 1 : 2
               }/details/`}
               color="primary"
@@ -200,7 +247,10 @@ const columnFunction = () => {
     {
       field: 'employeeId',
       headerName: 'Employee ID',
-      width: 120
+      width: 120,
+      renderCell: params => {
+        return <span>{Math.floor(params.value)}</span>;
+      }
     },
     {
       field: 'employeeName',

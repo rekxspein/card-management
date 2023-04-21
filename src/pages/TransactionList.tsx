@@ -1,7 +1,8 @@
 import {
   Box,
   Button,
-  LinearProgress,
+  CircularProgress,
+  Icon,
   Pagination,
   TextField,
   Typography
@@ -56,18 +57,40 @@ export const TransactionListPage: FC = () => {
   } = usePagination({
     pageSize: 20
   });
-  const { data, isLoading } = useQuery(
+  const { data, isLoading, isError, error, isFetching } = useQuery(
     ['getData', query, selectedAirlines],
     () => getData(selectedAirlines, query),
     {
       refetchOnReconnect: true,
-      refetchOnWindowFocus: true
+      refetchOnWindowFocus: true,
+      retry: 2
     }
   );
 
   useEffect(() => {
     setTotal(Math.min(data?.total ?? 0, 100 * pageSize));
   }, [setTotal, data?.total, pageSize]);
+
+  if (isError) {
+    return (
+      <Box
+        sx={{
+          height: '100vh',
+          width: '100%',
+          display: 'flex',
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: 1
+        }}
+      >
+        <Icon>error_outline</Icon>
+        <Typography sx={{ fontStyle: 'italic', fontWeight: 100 }}>
+          {(error as any).message}
+        </Typography>
+      </Box>
+    );
+  }
 
   return (
     <Box
@@ -78,126 +101,150 @@ export const TransactionListPage: FC = () => {
         flexDirection: 'column'
       }}
     >
-      <Box
-        sx={{
-          display: 'flex',
-          flexDirection: 'row',
-          justifyContent: 'flex-end',
-          alignItems: 'baseline',
-          gap: 2
-        }}
-      >
-        <Box>
-          <Typography sx={{ fontStyle: 'italic', fontWeight: 100 }}>
-            ** [available date range - Jan 2022 to Dec 2022]
-          </Typography>
-        </Box>
-        <DesktopDatePicker
-          label="Start Date"
-          value={startDate}
-          onChange={(p: Moment | null) => {
-            setStartDate(p);
-          }}
-          inputFormat="DD-MM-yyyy"
-          // InputAdornmentProps={{
-          //   sx: { '& > button': { color: '#282C35' } }
-          // }}
-          renderInput={params => <TextField variant="standard" {...params} />}
-        />
-        <DesktopDatePicker
-          label="End Date"
-          value={endDate}
-          onChange={(p: Moment | null) => {
-            setEndDate(p);
-          }}
-          inputFormat="DD-MM-yyyy"
-          renderInput={params => <TextField variant="standard" {...params} />}
-        />
-        <Button
-          id="create-order-orderlist-btn"
-          sx={{ m: 1 }}
-          variant="contained"
-          startIcon={<Download />}
-          onClick={() => {
-            if (mapping === '12' || mapping === '21') {
-              toast.error('Please select only one Airline', {
-                position: 'bottom-right',
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: 'dark'
-              });
-            } else if (startDate === null || endDate === null) {
-              toast.error('Please select both the dates', {
-                position: 'bottom-right',
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: 'dark'
-              });
-            } else {
-              axios({
-                url: `https://api-cardmanagement.ngopos.com/download/transactions/?airline_id=${mapping}&start_date=${startDate.toISOString()}&end_date=${endDate.toISOString()}`,
-                method: 'GET',
-                responseType: 'blob'
-              }).then(response => {
-                const href = URL.createObjectURL(response.data);
-                const link = document.createElement('a');
-                link.href = href;
-                const selectedIdx = selectedAirlines.map(a => a);
-                const downloadName =
-                  AIRLINES[selectedIdx.toString() as keyof typeof AIRLINES];
-                link.setAttribute(
-                  'download',
-                  `${downloadName}-${fileName === '' ? 'Transactions' : ''}.csv` //transaction route is '/' so need to set
-                );
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-                URL.revokeObjectURL(href);
-                toast.success(`Download Successfull`, {
-                  position: 'bottom-right',
-                  autoClose: 5000,
-                  hideProgressBar: false,
-                  closeOnClick: true,
-                  pauseOnHover: true,
-                  draggable: true,
-                  progress: undefined,
-                  theme: 'dark'
-                });
-              });
-            }
+      {isFetching || isLoading ? (
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            height: '100vh'
           }}
         >
-          Download
-        </Button>
-      </Box>
-      <DataGrid
-        rows={data?.items ?? []}
-        getRowId={rows => rows._id}
-        autoHeight
-        loading={isLoading}
-        columns={column}
-        rowCount={total}
-        pagination
-        page={page}
-        pageSize={pageSize}
-        paginationMode="server"
-        onPageChange={setPage}
-        onPageSizeChange={setPageSize}
-        disableSelectionOnClick
-        disableColumnMenu
-        components={{
-          Pagination: CustomPagination(totalPages, query.pageNo, setPage),
-          LoadingOverlay: LinearProgress
-        }}
-      />
+          <CircularProgress />
+        </Box>
+      ) : (
+        <Box
+          sx={{
+            height: '100%',
+            width: '100%',
+            display: 'flex',
+            flexDirection: 'column'
+          }}
+        >
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'flex-end',
+              alignItems: 'baseline',
+              gap: 2
+            }}
+          >
+            <Box>
+              <Typography sx={{ fontStyle: 'italic', fontWeight: 100 }}>
+                ** [available date range - Jan 2022 to Dec 2022]
+              </Typography>
+            </Box>
+            <DesktopDatePicker
+              label="Start Date"
+              value={startDate}
+              onChange={(p: Moment | null) => {
+                setStartDate(p);
+              }}
+              inputFormat="DD-MM-yyyy"
+              renderInput={params => (
+                <TextField variant="standard" {...params} />
+              )}
+            />
+            <DesktopDatePicker
+              label="End Date"
+              value={endDate}
+              onChange={(p: Moment | null) => {
+                setEndDate(p);
+              }}
+              inputFormat="DD-MM-yyyy"
+              renderInput={params => (
+                <TextField variant="standard" {...params} />
+              )}
+            />
+            <Button
+              id="create-order-orderlist-btn"
+              sx={{ m: 1 }}
+              variant="contained"
+              startIcon={<Download />}
+              onClick={() => {
+                if (mapping === '12' || mapping === '21') {
+                  toast.error('Please select only one Airline', {
+                    position: 'bottom-right',
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: 'dark'
+                  });
+                } else if (startDate === null || endDate === null) {
+                  toast.error('Please select both the dates', {
+                    position: 'bottom-right',
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: 'dark'
+                  });
+                } else {
+                  axios({
+                    url: `https://api-cardmanagement.ngopos.com/download/transactions/?airline_id=${mapping}&start_date=${startDate.toISOString()}&end_date=${endDate.toISOString()}`,
+                    method: 'GET',
+                    responseType: 'blob'
+                  }).then(response => {
+                    const href = URL.createObjectURL(response.data);
+                    const link = document.createElement('a');
+                    link.href = href;
+                    const selectedIdx = selectedAirlines.map(a => a);
+                    const downloadName =
+                      AIRLINES[selectedIdx.toString() as keyof typeof AIRLINES];
+                    link.setAttribute(
+                      'download',
+                      `${downloadName}-${
+                        fileName === '' ? 'Transactions' : ''
+                      }.csv` //transaction route is '/' so need to set
+                    );
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    URL.revokeObjectURL(href);
+                    toast.success(`Download Successfull`, {
+                      position: 'bottom-right',
+                      autoClose: 5000,
+                      hideProgressBar: false,
+                      closeOnClick: true,
+                      pauseOnHover: true,
+                      draggable: true,
+                      progress: undefined,
+                      theme: 'dark'
+                    });
+                  });
+                }
+              }}
+            >
+              Download
+            </Button>
+          </Box>
+          <DataGrid
+            key={data?.items.length}
+            rows={data?.items ?? []}
+            getRowId={rows => rows._id}
+            autoHeight
+            columns={column}
+            rowCount={total}
+            pagination
+            page={page}
+            pageSize={pageSize}
+            paginationMode="server"
+            onPageChange={setPage}
+            onPageSizeChange={setPageSize}
+            disableSelectionOnClick
+            disableColumnMenu
+            components={{
+              Pagination: CustomPagination(totalPages, query.pageNo, setPage)
+            }}
+          />
+        </Box>
+      )}
     </Box>
   );
 };
