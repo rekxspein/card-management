@@ -1,5 +1,13 @@
 import { Download } from '@mui/icons-material';
-import { Box, Button, LinearProgress, Pagination } from '@mui/material';
+import {
+  Box,
+  Button,
+  Icon,
+  IconButton,
+  LinearProgress,
+  Pagination,
+  Tooltip
+} from '@mui/material';
 import { DataGrid, GridActionsColDef, GridColDef } from '@mui/x-data-grid';
 import axios from 'axios';
 import { FC, useEffect } from 'react';
@@ -168,9 +176,31 @@ export const GreyListPage: FC = () => {
 
 const column = new Array<GridColDef | GridActionsColDef>(
   {
+    field: 'actions',
+    headerName: 'Action',
+    type: 'actions',
+    width: 100,
+    getActions: e => {
+      if (e.row.CardNumber) {
+        return [
+          <Tooltip
+            title="This will remove this Card from Grey List"
+            placement="top"
+          >
+            <IconButton color="primary">
+              <Icon>wb_incandescent</Icon>
+            </IconButton>
+          </Tooltip>
+        ];
+      } else {
+        return []; // This will prevent rendering of this Cell before data is fetched
+      }
+    }
+  },
+  {
     field: 'CardNumber',
     headerName: 'Card Number',
-    width: 250
+    width: 200
   },
   {
     field: 'CardHolderName',
@@ -190,12 +220,12 @@ const column = new Array<GridColDef | GridActionsColDef>(
   {
     field: 'Approved_Transaction',
     headerName: 'Approved Transaction',
-    width: 200
+    width: 180
   },
   {
     field: 'Declined_Transaction',
     headerName: 'Declined Transaction',
-    width: 300
+    width: 180
   }
 );
 
