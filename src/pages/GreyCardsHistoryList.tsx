@@ -1,4 +1,4 @@
-import { Box } from '@mui/material';
+import { Box, CircularProgress, Icon, Typography } from '@mui/material';
 import { DataGrid, GridActionsColDef, GridColDef } from '@mui/x-data-grid';
 import axios from 'axios';
 import { FC } from 'react';
@@ -11,7 +11,17 @@ const getData = async (airlines: string[]) => {
   const airlinesIds = Object.keys(AIRLINES);
   const mapping = airlines.map(a => airlinesIds.indexOf(a) + 1).join('');
 
-  const res = await axios.get<[{}[]]>(
+  type BlackCardData = {
+    createdAt: string;
+    CardNumber: string;
+    CardHolderName: string;
+    TotalAmount: number;
+    Total_transaction: number;
+    Approved_Transaction: number;
+    Declined_Transaction: number;
+  }[];
+
+  const res = await axios.get<[BlackCardData]>(
     BASE_API_URL + `black_cards_history/?airline_id=${mapping}`
   );
 
@@ -21,14 +31,36 @@ const getData = async (airlines: string[]) => {
 export const GreyCardsHistoryListPage: FC = () => {
   const selectedAirlines = useActiveAirline(e => e.activeAirline);
 
-  const { data, isLoading } = useQuery(
+  const { data, isLoading, isError, error, isFetching } = useQuery(
     ['getData', selectedAirlines],
     () => getData(selectedAirlines),
     {
       refetchOnReconnect: true,
-      refetchOnWindowFocus: true
+      refetchOnWindowFocus: true,
+      retry: 2
     }
   );
+
+  if (isError) {
+    return (
+      <Box
+        sx={{
+          height: '100vh',
+          width: '100%',
+          display: 'flex',
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: 1
+        }}
+      >
+        <Icon>error_outline</Icon>
+        <Typography sx={{ fontStyle: 'italic', fontWeight: 100 }}>
+          {(error as any).message}
+        </Typography>
+      </Box>
+    );
+  }
 
   return (
     <Box
@@ -39,16 +71,39 @@ export const GreyCardsHistoryListPage: FC = () => {
         flexDirection: 'column'
       }}
     >
-      <DataGrid
-        rows={data ?? []}
-        getRowId={rows => rows._id}
-        autoHeight
-        loading={isLoading}
-        columns={column}
-        pagination
-        disableSelectionOnClick
-        disableColumnMenu
-      />
+      {isFetching || isLoading ? (
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            height: '100vh'
+          }}
+        >
+          <CircularProgress />
+        </Box>
+      ) : (
+        <Box
+          sx={{
+            height: '100vh',
+            width: '100%',
+            display: 'flex',
+            flexDirection: 'column'
+          }}
+        >
+          <DataGrid
+            key={data?.length}
+            rows={data ?? []}
+            getRowId={rows => rows._id}
+            autoHeight
+            loading={isLoading}
+            columns={column}
+            pagination
+            disableSelectionOnClick
+            disableColumnMenu
+          />
+        </Box>
+      )}
     </Box>
   );
 };
