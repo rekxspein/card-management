@@ -4,7 +4,9 @@ import {
   CircularProgress,
   Icon,
   Pagination,
+  Popover,
   TextField,
+  Tooltip,
   Typography
 } from '@mui/material';
 import axios from 'axios';
@@ -27,11 +29,45 @@ const getData = async (
   const airlinesIds = Object.keys(AIRLINES);
   const mapping = airlines.map(a => airlinesIds.indexOf(a) + 1).join('');
 
-  const res = await axios.get<{ items: any[]; total: number }>(
+  const res = await axios.get<{
+    items: [
+      {
+        _id: 'string';
+        MerchantName: 'string';
+        MerchantCity: 'string';
+        TxDateTime: 'string';
+        MID: 'string';
+        TID: 'string';
+        Cust_Device_Id: 0;
+        TipAmount: 0;
+        Amount: 0;
+        CardNumber: 'string';
+        TxStatus: 'string';
+        Type: 'string';
+        AuthNo: 'string';
+        RRNo: 0;
+        Cr_DbType: 'string';
+        BatchNo: 0;
+        Login_ID: 0;
+        CardHolderName: 'string';
+        CardHolderMobile: 0;
+        RefNo: 'string';
+        ExtraNotes: 'string';
+        TxType: 'string';
+        BookingInfo: 'string';
+        TotalAmount: 0;
+        FlightNumber: 'string';
+        TimestampDateTime: 'string';
+        Destination: 'string';
+        Origin: 'string';
+        Crew: ['string'];
+      }
+    ];
+    total: number;
+  }>(
     BASE_API_URL +
       `transaction_list/airlines=${mapping}?page=${query.pageNo}&size=${query.pageSize}`
   );
-
   return res.data;
 };
 
@@ -67,9 +103,93 @@ export const TransactionListPage: FC = () => {
     }
   );
 
+  const [info, setInfo] = useState<
+    | {
+        customerName: string;
+        pnr: string;
+        seatNumber: string;
+      }
+    | string
+  >('');
+  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
+
   useEffect(() => {
     setTotal(Math.min(data?.total ?? 0, 100 * pageSize));
   }, [setTotal, data?.total, pageSize]);
+
+  const column = new Array<GridColDef | GridActionsColDef>(
+    {
+      field: 'MerchantName',
+      headerName: 'Merchant Name',
+      width: 250
+    },
+    {
+      field: 'MerchantCity',
+      headerName: 'Merchant City',
+      width: 130
+    },
+    {
+      field: 'TxDateTime',
+      headerName: 'Tx Date Time',
+      width: 200
+    },
+    {
+      field: 'Amount',
+      headerName: 'Amount',
+      width: 80
+    },
+    {
+      field: 'CardNumber',
+      headerName: 'Card Number',
+      width: 150
+    },
+    {
+      field: 'TxStatus',
+      headerName: 'Tx Status',
+      width: 120
+    },
+    {
+      field: 'CardHolderName',
+      headerName: 'MS Card Holder Name',
+      width: 240
+    },
+    {
+      field: 'TxType',
+      headerName: 'Tx Type',
+      width: 100
+    },
+    {
+      field: 'BookingInfo',
+      headerName: 'Booking Info',
+      width: 120,
+      renderCell: params => {
+        const bookingInfo = params.row.BookingInfo;
+        return (
+          <Tooltip title="Click to see Details" placement="bottom-start">
+            <Button
+              onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
+                setAnchorEl(event.currentTarget);
+                setInfo(bookingInfo);
+              }}
+            >
+              <Icon>feed</Icon>
+            </Button>
+          </Tooltip>
+        );
+      },
+      resizable: true
+    },
+    {
+      field: 'Origin',
+      headerName: 'Origin',
+      width: 100
+    },
+    {
+      field: 'Destination',
+      headerName: 'Destination',
+      width: 100
+    }
+  );
 
   if (isError) {
     return (
@@ -243,79 +363,30 @@ export const TransactionListPage: FC = () => {
               Pagination: CustomPagination(totalPages, query.pageNo, setPage)
             }}
           />
+          <Popover
+            id={data?.items[0]._id}
+            open={info ? true : false}
+            anchorEl={anchorEl}
+            onClose={() => setInfo('')}
+            anchorOrigin={{
+              vertical: 'bottom',
+              horizontal: 'left'
+            }}
+          >
+            <Typography sx={{ p: 2 }}>
+              Customer Name:{' '}
+              {typeof info === 'object' ? info.customerName : info}
+              <br />
+              PNR: {typeof info === 'object' ? info.pnr : info}
+              <br />
+              Seat Number: {typeof info === 'object' ? info.seatNumber : info}
+            </Typography>
+          </Popover>
         </Box>
       )}
     </Box>
   );
 };
-
-const column = new Array<GridColDef | GridActionsColDef>(
-  {
-    field: 'MerchantName',
-    headerName: 'Merchant Name',
-    width: 250
-  },
-  {
-    field: 'MerchantCity',
-    headerName: 'Merchant City',
-    width: 130
-  },
-  {
-    field: 'TxDateTime',
-    headerName: 'Tx Date Time',
-    width: 200
-  },
-  {
-    field: 'Amount',
-    headerName: 'Amount',
-    width: 80
-  },
-  {
-    field: 'CardNumber',
-    headerName: 'Card Number',
-    width: 150
-  },
-  {
-    field: 'TxStatus',
-    headerName: 'Tx Status',
-    width: 120
-  },
-  {
-    field: 'CardHolderName',
-    headerName: 'MS Card Holder Name',
-    width: 240
-  },
-  {
-    field: 'TxType',
-    headerName: 'Tx Type',
-    width: 100
-  },
-  {
-    field: 'BookingInfo_customerName',
-    headerName: 'Booking Info Customer Name',
-    width: 250
-  },
-  {
-    field: 'BookingInfo_pnr',
-    headerName: 'Booking Info PNR',
-    width: 150
-  },
-  {
-    field: 'BookingInfo_mobile',
-    headerName: 'Booking Info Mobile',
-    width: 200
-  },
-  {
-    field: 'Origin',
-    headerName: 'Origin',
-    width: 100
-  },
-  {
-    field: 'Destination',
-    headerName: 'Destination',
-    width: 100
-  }
-);
 
 const CustomPagination = (
   totalPages: number,
