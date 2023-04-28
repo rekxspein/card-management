@@ -11,7 +11,9 @@ import {
   Icon,
   Pagination,
   Typography,
-  Tooltip
+  Tooltip,
+  TextField,
+  InputAdornment
 } from '@mui/material';
 import { DataGrid, GridActionsColDef, GridColDef } from '@mui/x-data-grid';
 import axios from 'axios';
@@ -51,16 +53,28 @@ export const GreyListPage: FC = () => {
     const airlinesIds = Object.keys(AIRLINES);
     const mapping = airlines.map(a => airlinesIds.indexOf(a) + 1).join('');
 
-    const res = await axios.get<{ items: any[]; total: number }>(
-      BASE_API_URL +
-        `black_cards/?airline_id=${mapping}&page=${query.pageNo}&size=${query.pageSize}`
-    );
-
-    return res.data;
+    if (searchValue === '') {
+      const res = await axios.get<{ items: any[]; total: number }>(
+        BASE_API_URL +
+          `black_cards/?airline_id=${mapping}&page=${query.pageNo}&size=${query.pageSize}`
+      );
+      return res.data;
+    } else {
+      const res = await axios.get<{ items: any[]; total: number }>(
+        BASE_API_URL +
+          `black_cards/?airline_id=${mapping}&CardNumber=${searchValue}&page=${query.pageNo}&size=${query.pageSize}`
+      );
+      return res.data;
+    }
   };
 
+  const [cardID, setCardId] = useState('');
+  const [searchValue, setSearchValue] = useState('');
+  const [showClearIcon, setShowClearIcon] = useState('none');
+  const client = useQueryClient();
+
   const { data, isLoading, isError, error, isFetching } = useQuery(
-    ['getGreyListData', query, selectedAirlines],
+    ['getGreyListData', query, selectedAirlines, searchValue],
     () => getGreyListData(selectedAirlines, query),
     {
       refetchOnReconnect: true,
@@ -68,10 +82,6 @@ export const GreyListPage: FC = () => {
       retry: 2
     }
   );
-
-  const [cardID, setCardId] = useState('');
-
-  const client = useQueryClient();
 
   const removeCardFromBlackList = async (cardId: string) => {
     const res = await axios.delete(
@@ -199,9 +209,40 @@ export const GreyListPage: FC = () => {
             sx={{
               display: 'flex',
               flexDirection: 'row',
-              justifyContent: 'flex-end'
+              justifyContent: 'flex-end',
+              alignItems: 'center'
             }}
           >
+            <TextField
+              size="small"
+              placeholder="Type Card Number"
+              style={{ width: 300 }}
+              variant="outlined"
+              value={searchValue}
+              onChange={e => {
+                setSearchValue(e.target.value);
+                setShowClearIcon(e.target.value === '' ? 'none' : 'flex');
+              }}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <Icon>search</Icon>
+                  </InputAdornment>
+                ),
+                endAdornment: (
+                  <InputAdornment
+                    position="end"
+                    style={{ display: showClearIcon }}
+                    onClick={() => {
+                      setSearchValue('');
+                      setShowClearIcon('none');
+                    }}
+                  >
+                    <Icon>close</Icon>
+                  </InputAdornment>
+                )
+              }}
+            />
             <Button
               id="create-order-orderlist-btn"
               sx={{ m: 1 }}
