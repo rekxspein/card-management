@@ -1,39 +1,58 @@
-import { Box, CircularProgress, Icon, Typography } from '@mui/material';
+import {
+  Box,
+  CircularProgress,
+  Icon,
+  InputAdornment,
+  TextField,
+  Typography
+} from '@mui/material';
 import { DataGrid, GridActionsColDef, GridColDef } from '@mui/x-data-grid';
 import axios from 'axios';
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import { useQuery } from 'react-query';
 import { BASE_API_URL, AIRLINES } from '../constant';
 import { useActiveAirline } from '../store/activeAirline';
 import moment from 'moment';
 
-const getData = async (airlines: string[]) => {
-  const airlinesIds = Object.keys(AIRLINES);
-  const mapping = airlines.map(a => airlinesIds.indexOf(a) + 1).join('');
-
-  type BlackCardData = {
-    createdAt: string;
-    CardNumber: string;
-    CardHolderName: string;
-    TotalAmount: number;
-    Total_transaction: number;
-    Approved_Transaction: number;
-    Declined_Transaction: number;
-  }[];
-
-  const res = await axios.get<[BlackCardData]>(
-    BASE_API_URL + `black_cards_history/?airline_id=${mapping}`
-  );
-
-  return res.data;
-};
-
 export const GreyCardsHistoryListPage: FC = () => {
+  const getGreyCardHistoryData = async (airlines: string[]) => {
+    const airlinesIds = Object.keys(AIRLINES);
+    const mapping = airlines.map(a => airlinesIds.indexOf(a) + 1).join('');
+
+    type BlackCardData = [
+      {
+        createdAt: string;
+        CardNumber: string;
+        CardHolderName: string;
+        TotalAmount: number;
+        Total_transaction: number;
+        Approved_Transaction: number;
+        Declined_Transaction: number;
+      }
+    ];
+
+    if (searchValue === '') {
+      const res = await axios.get<BlackCardData>(
+        BASE_API_URL + `black_cards_history/?airline_id=${mapping}`
+      );
+
+      return res.data;
+    } else {
+      const res = await axios.get<BlackCardData>(
+        BASE_API_URL +
+          `black_cards_history/?airline_id=${mapping}&CardNumber=${searchValue}`
+      );
+      return res.data;
+    }
+  };
   const selectedAirlines = useActiveAirline(e => e.activeAirline);
 
+  const [searchValue, setSearchValue] = useState('');
+  const [showClearIcon, setShowClearIcon] = useState('none');
+
   const { data, isLoading, isError, error, isFetching } = useQuery(
-    ['getData', selectedAirlines],
-    () => getData(selectedAirlines),
+    ['getGreyCardHistoryData', selectedAirlines, searchValue],
+    () => getGreyCardHistoryData(selectedAirlines),
     {
       refetchOnReconnect: true,
       refetchOnWindowFocus: true,
@@ -91,6 +110,45 @@ export const GreyCardsHistoryListPage: FC = () => {
             flexDirection: 'column'
           }}
         >
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'flex-end',
+              alignItems: 'center'
+            }}
+          >
+            <TextField
+              size="small"
+              placeholder="Type Card Number"
+              sx={{ width: 300, m: 1 }}
+              variant="outlined"
+              value={searchValue}
+              onChange={e => {
+                setSearchValue(e.target.value);
+                setShowClearIcon(e.target.value === '' ? 'none' : 'flex');
+              }}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <Icon>search</Icon>
+                  </InputAdornment>
+                ),
+                endAdornment: (
+                  <InputAdornment
+                    position="end"
+                    sx={{ display: showClearIcon }}
+                    onClick={() => {
+                      setSearchValue('');
+                      setShowClearIcon('none');
+                    }}
+                  >
+                    <Icon>close</Icon>
+                  </InputAdornment>
+                )
+              }}
+            />
+          </Box>
           <DataGrid
             key={data?.length}
             rows={data ?? []}
@@ -122,7 +180,7 @@ const column = new Array<GridColDef | GridActionsColDef>(
   {
     field: 'Total_transaction',
     headerName: 'Total Transaction',
-    width: 150
+    width: 120
   },
   {
     field: 'Amount',
@@ -132,12 +190,12 @@ const column = new Array<GridColDef | GridActionsColDef>(
   {
     field: 'Approved_Transaction',
     headerName: 'Approved Transaction',
-    width: 200
+    width: 150
   },
   {
     field: 'Declined_Transaction',
     headerName: 'Declined Transaction',
-    width: 200
+    width: 150
   },
   {
     field: 'DateCreated',
